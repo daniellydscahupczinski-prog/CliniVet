@@ -1,51 +1,56 @@
-from app.models.cliente import Cliente
 
+from app.models.agendamento import Agendamento
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
 
-class Cliente_View:
+
+class Agendamento_View:
     def __init__(self, root, controller):
         self.root = root
         self.controller = controller
         self._estados = []
+        self._cidades = []
         self.configurar_janela()
         self.criar_componentes()
         self.configurar_treeview()
         self.configurar_eventos()
 
     def configurar_janela(self):
-        self.root.title((("Crud de Clientes")))
-        self.root.geometry("800x600")
+        self.root.title((("Crud de agendamentos")))
+        self.root.geometry("900x600")
         self.root.resizable(False, False)
+
 
     def criar_componentes(self):
         self.lbl_titulo = tk.Label(
             self.root,
-            text = ("Cadastro de cliente"),
-            font = ("arial", 16, "bold")
+            text = (("Cadastro de agendamento")),
+            font = ("Arial", 16, "bold"),
         )
         self.lbl_titulo.grid(
             row = 0,
             column = 0,
-            columnspan = 2,
+            columnspan = 4,
             padx = 5,
             pady = 5
         )
         self.frm_dados = tk.LabelFrame(
             self.root,
-            text = ("Dados do cliente")
+            text = (("Dados do agendamento"))
         )
         self.frm_dados.grid(
             row = 1,
             column = 0,
-            columnspan=2,
+            columnspan=4,
             padx = 10,
             pady = 5,
             sticky = "ew"
         )
         self.frm_dados.grid_columnconfigure(0, weight=0)
         self.frm_dados.grid_columnconfigure(1, weight=1)
+        self.frm_dados.grid_columnconfigure(2, weight=0)
+        self.frm_dados.grid_columnconfigure(3, weight=1)
         self.lbl_id = tk.Label(
             self.frm_dados,
             text = "ID:"
@@ -69,91 +74,93 @@ class Cliente_View:
             pady = 5,
             sticky = "w"
         )
-        self.lbl_nome = tk.Label(
+        self.lbl_servico_agendamento = tk.Label(
             self.frm_dados,
-            text = ("Nome")
+            text = "SERVICOS"
         )
-        self.lbl_nome.grid(
+        self.lbl_servico_agendamento.grid(
             row = 1,
             column = 0,
             padx = 5,
             pady = 5,
             sticky = "w"
         )
-        self.txt_nome = tk.Entry(
+        self.txt_servico_agendamento = tk.Entry(
             self.frm_dados,
             width = 40
         )
-        self.txt_nome.grid(
+        self.txt_servico_agendamento.grid(
             row = 1,
             column = 1,
             padx = 5,
             pady = 5,
             sticky = "w"
         )
-        self.lbl_telefone = tk.Label(
+        self.lbl_horario_agendamento = tk.Label(
             self.frm_dados,
-            text = ("Numero de telefone:")
+            text = "Horarios"
         )
-        self.lbl_telefone.grid(
+        self.lbl_horario_agendamento.grid(
             row = 1,
-            column = 0,
-            padx = 5,
-            pady = 5,
-            sticky = "w"            
-        )
-        self.txt_telefone = tk.Entry(
-            self.frm_dados,
-            width = 40
-        )
-        self.txt_telefone.grid(
-            row = 1,
-            column = 1,
+            column = 2,
             padx = 5,
             pady = 5,
             sticky = "w"
         )
-        self.lbl_cpf = tk.Label(
+        self.txt_horario_agendamento = tk.Entry(
             self.frm_dados,
-            text = ("Numero do cpf:")
+            width = 20,
+            state = "readonly"
         )
-        self.lbl_cpf.grid(
+        self.txt_horario_agendamento.grid(
             row = 1,
-            column = 0,
+            column= 3,
             padx = 5,
             pady = 5,
             sticky = "w"
         )
-        self.txt_cpf = tk.Entry(
+        self.lbl_data_agendamento = tk.Label(
             self.frm_dados,
-            width = 40
+            text = "Data do agendamento"
         )
-        self.txt_cpf.grid(
-            row = 1,
-            column = 1,
-            padx = 5,
-            pady = 5,
-            sticky = "w"
-        )
-        self.lbl_animal = tk.Label(
-            self.frm_dados,
-            text = ("Animal:")
-        )
-        self.lbl_animal.grid(
+        self.lbl_id.grid(
             row = 2,
             column = 0,
             padx = 5,
             pady = 5,
             sticky = "w"
         )
-        self.cmb_animal = ttk.Combobox(
+        self.txt_id = tk.Entry(
+            self.frm_dados,
+            width = 20,
+            state = "readonly"
+        )
+        self.txt_id.grid(
+            row = 2,
+            column= 1,
+            padx = 5,
+            pady = 5,
+            sticky = "w"
+        )
+        self.lbl_status_agendamento = tk.Label(
+            self.frm_dados,
+            text = ("Status:")
+        )
+        self.lbl_status_agendamento.grid(
+            row = 2,
+            column = 2,
+            padx = 5,
+            pady = 5,
+            sticky = "w"
+        )
+        self.cmb_status_agendamento = ttk.Combobox(
             self.frm_dados,
             width = 37,
             state = "readonly"
         )
-        self.cmb_animal.grid(
+        self.cmb_status_agendamento.grid(
             row = 2,
-            column = 1,
+            column = 3,
             padx = 5,
             pady = 5,
             sticky = "w"
@@ -164,15 +171,15 @@ class Cliente_View:
             relief = "groove"
         )
         self.frm_botoes.grid(
-            row = 3,
+            row = 4,
             column = 0,
             padx = 10,
             pady = 5,
-            columnspan = 2,
+            columnspan = 4,
         )
         self.btn_novo = tk.Button(
             self.frm_botoes,
-            text = (("novo:")),
+            text = (("novo")),
             width = 15
         )
         self.btn_novo.grid(
@@ -225,71 +232,78 @@ class Cliente_View:
             padx = 5,
             pady = 5
         )
-        self.tbl_cliente = ttk.Treeview(
+        self.tbl_agendamento = ttk.Treeview(
             self.root,
-            height = 12
+            height = 10
         )
-        self.tbl_cliente.grid(
-            row = 2,
+        self.tbl_agendamento.grid(
+            row = 5,
             column = 0,
-            columnspan = 2,
+            columnspan = 4,
             padx = 10,
             pady = 10,
             sticky = "nsew"
         )
     def configurar_treeview(self):
-        self.tbl_cliente["columns"] = (
+        self.tbl_clientes["columns"] = (
             "id",
-            "nome",
-            "telefone",
-            "cpf",
-            "animal"
+            "servico_agendamento",
+            "horario_agendamento",
+            "data_agendamento",
+            "status_agendamento"
         )
-        self.tbl_cliente.column(
+        self.tbl_agendamento.column(
             "#0",
             width = 0,
             stretch = False
         )
-        self.tbl_cliente.column(
+        self.tbl_agendamento.column(
             "id",
             width = 10,
             anchor = "center"
         )
-        self.tbl_cliente.column(
-            "nome",
-            width = 50
-        )
-        self.tbl_cliente.column(
-            "telefone",
+        self.tbl_agendamento.column(
+            "servico_agendamento",
             width = 40
         )
-        self.tbl_cliente.column(
-            "cpf",
-            width = 40
+        self.tbl_agendamento.column(
+            "horario_agendamento",
+            width = 20,
+            anchor = "center"
         )
-        self.tbl_cliente.column(
-            "animal",
-            width = 40
+        self.tbl_agendamento.column(
+            "data_agendamento",
+            width = 15,
+            anchor = "center"
         )
-        self.tbl_cliente.heading(
+        self.tbl_agendamento.column(
+            "limite",
+            width = 20,
+            anchor = "e"
+        )
+        self.tbl_agendamento.column(
+            "status_agendamento",
+            width = 30
+        )
+        self.tbl_agendamento.heading(
             "id",
             text = "ID"
         )
-        self.tbl_cliente.heading(
-            "nome",
-            text = "Nome"
+        self.tbl_agendamento.heading(
+            "servicos",
+            text = "Servicos"
         )
-        self.tbl_cliente.heading(
-            "telefone",
-            text = "Telefone"
+        self.tbl_agendamento.heading(
+            "horario_agendamento",
+            text = "Horario"
         )
-        self.tbl_cliente.heading(
-            "cpf",
-            text = "CPF"
+        self.tbl_agendamento.heading(
+            "Data",
+            text = "Data"
         )
-        self.tbl_cliente.heading(
-            "animal",
-            text = "animal"
+        self.tbl_agendamento.heading(
+            "status",
+            text = "Status do agendamento"
         )
     def configurar_eventos(self):
         self.btn_novo.config(
@@ -307,78 +321,77 @@ class Cliente_View:
         self.btn_fechar.config(
             command = self.fechar
         )
-        self.tbl_cidades.bind(
+        self.tbl_agendamento.bind(
             "<<TreeviewSelect>>",
-            self.controller.selecionar_cidade
-
+            self.controller.selecionar_agendamento
         )
-    def carregar_animal(self, animal):
-        self._animal = animal
-        valores = []
-        for animal in animal:
-            valores.append(
-                f"{animal.id} - {animal.nome}"
-            )
-        self.cmb_animal["values"] = valores
-        self.cmb_animal.set("")
-
-    def preencher_campos(self, cliente):
+    def preencher_campos(self, agendamento):
 
         self.limpar_campos()
-        self.txt_id.config(state = "normal")
+
+        self.txt_id.config(state="normal")
         self.txt_id.insert(
-            0,
-            str(cliente.id)
+        0,
+        str(agendamento.id)
         )
-        self.txt_id.config(state = "readonly")
+        self.txt_id.config(state="readonly")
 
-        self.txt_nome.insert(
-            0,
-            cliente.nome
+        self.txt_servico.insert(
+        0,
+        agendamento.servico_agendamento
         )
 
-        for indice, animal in enumerate(self._animal):
-            if animal.id == cliente.animal.id:
-                self.cmb_animal.current(indice)
-                break
+        self.txt_horario.insert(
+        0,
+        agendamento.horario_agendamento
+        )
 
+        self.txt_data.insert(
+        0,
+        agendamento.data_agendamento
+        )
+
+        self.cmb_status.set(
+        agendamento.status_agendamento
+        )
     def limpar_campos(self):
-        self.txt_id.config(state = "normal")
+        self.txt_id.config(state="normal")
         self.txt_id.delete(0, tk.END)
-        self.txt_id.config(state = "readonly")
+        self.txt_id.config(state="readonly")
 
-        self.txt_nome.delete(0, tk.END)
-        self.txt_telefone.delete(0, tk.END)
-        self.txt_cpf.delete(0, tk.END)
-        self.cmb_animal.set("")
+        self.txt_servico.delete(0, tk.END)
+        self.txt_horario.delete(0, tk.END)
+        self.txt_data.delete(0, tk.END)
 
-        self.txt_nome.focus()
+        self.cmb_status.set("")
+
+        self.txt_servico.focus()   
 
     def limpar_treeview(self):
-        for item in self.tbl_cliente.get_children():
-            self.tbl_cliente.delete(item)
+        for item in self.tbl_agendamento.get_children():
+            self.tbl_agendamento.delete(item)   
 
     def get_id_selecionado(self):
 
-        item = self.tbl_cliente.selection()[0]
+        item = self.tbl_agendamento.selection()[0]
 
-        return self.tbl_cliente.item(item)["values"][0]
+        return self.tbl_agendamento.item(item)["values"][0]
     
     def confirmar_exclusao(self):
 
         return messagebox.askyesno(
-            (("confirmacao")),
-            (("Deseja realmente excluir este cliente?")),
+            (("Confirmaçao")),
+            (("Deseja realmente excluir este agendamento?")),
             parent=self.root
         )
-    
-    def ler_dados_cliente(self):
-        nome = self.txt_nome.get()
-        indice = self.cmb_animal.current()
-        if indice < 0:
-            raise ValueError((("Selecione um animal")))
-        animal= self._animal[indice]
-        return nome, animal
+
+    def ler_dados_agendamento(self):
+        servico_agendamento = self.txt_servico.get()
+        horario_agendamento = self.txt_horario.get()
+        data_agendamento = self.txt_data.get()
+        status_agendamento = self.cmb_status.get()
+
+        return servico_agendamento, horario_agendamento, data_agendamento, status_agendamento
     
     def exibir_mensagem(self, mensagem, sucesso=True):
         if sucesso:
@@ -394,38 +407,25 @@ class Cliente_View:
                 parent=self.root
             )
 
-    def exibir_cliente(self, cliente):
+    def exibir_agendamento(self, agendamento):
 
         self.limpar_treeview()
 
-        for cliente in cliente:
+        for agendamento in agendamento:
 
-            self.tbl_cliente.insert(
+            self.tbl_clientes.insert(
                 "",
                 tk.END,
                 values=(
-                    cliente.id,
-                    cliente.nome,
-                    cliente.cpf,
-                    cliente.telefone,
-                    f"{cliente.animal.nome}"
+                    agendamento.id,
+                    agendamento.servico_agendamento,
+                    agendamento.horario_agendamento,
+                    agendamento.data_agendamento,
+                    agendamento.status_agendamento
                 )
             )
     def fechar(self):
         self.root.destroy()
 
     def iniciar(self):
-        self.controller.carregar_animal()
         self.controller.get_all()
- 
-    
-
-
-
-
-
-
-
-
-
-

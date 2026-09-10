@@ -197,4 +197,120 @@ class Raca_View:
             "nome",
             text = "Nome"
         )
+    def configurar_eventos(self):
+        self.btn_novo.config(
+            command = self.controller.new
+        )
+        self.btn_salvar.config(
+            command = self.controller.save
+        )
+        self.btn_alterar.config(
+            command = self.controller.update
+        )
+        self.btn_excluir.config(
+            command = self.controller.delete
+        )
+        self.btn_fechar.config(
+            command = self.fechar
+        )
+        self.tbl_clientes.bind(
+            "<<TreeviewSelect>>",
+            self.controller.selecionar_cliente
+        )
+    
+def preencher_campos(self, raca):
+
+    self.limpar_campos()
+
+    self.txt_id.config(state="normal")
+
+    self.txt_id.insert(
+        0,
+        str(raca.id)
+    )
+
+    self.txt_id.config(state="readonly")
+
+    self.txt_nome.insert(
+        0,
+        raca.nome
+    )
+
+def limpar_campos(self):
+
+    self.txt_id.config(state="normal")
+    self.txt_id.delete(0, tk.END)
+    self.txt_id.config(state="readonly")
+
+    self.txt_nome.delete(0, tk.END)
+
+    self.txt_nome.focus()
+
+def limpar_treeview(self):
+        for item in self.tbl_raca.get_children():
+            self.tbl_raca.delete(item)
+
+def get_id_selecionado(self):
+
+        item = self.tbl_raca.selection()[0]
+
+        return self.tbl_raca.item(item)["values"][0]
+
+def confirmar_exclusao(self):
+
+        return messagebox.askyesno(
+            (("Confirmacao")),
+            (("Deseja realmente excluir esta raca?")),
+            parent=self.root
+        )
+
+def ler_dados_raca(self):
+
+    nome = self.txt_nome.get()
+
+    return nome
+
+def exibir_mensagem(self, mensagem, sucesso=True):
+        if sucesso:
+            messagebox.showinfo(
+                "Mini ERP",
+                mensagem,
+                parent=self.root
+            )
+        else:
+            messagebox.showerror(
+                "Mini ERP",
+                mensagem,
+                parent=self.root
+            )
+
+def exibir_racas(self, racas):
+
+    self.limpar_treeview()
+
+    for raca in racas:
+
+        self.tbl_racas.insert(
+            "",
+            tk.END,
+            values=(
+                raca.id,
+                raca.nome
+            )
+        )
+
+
+def fechar(self):
+    self.root.destroy()
+
+
+def iniciar(self):
+    self.controller.get_all()
+
+
+
+
+
+
+
 
