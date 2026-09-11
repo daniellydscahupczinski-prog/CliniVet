@@ -1,4 +1,4 @@
-class agendamento:
+class Agendamento:
 
     def __init__(
             self,
