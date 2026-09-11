@@ -1,4 +1,4 @@
-from colorama import init
+from colorama import init, Fore, Style
 from app.core.database import Database
 
 # Componentes de Raca
@@ -15,6 +15,21 @@ from app.controllers import cliente_controller
 from app.dao.agendamento_dao import Agendamento_DAO
 from app.views.agendamento_view import Agendamento_View
 from app.controllers.agendamento_controller import Agendamento_Controller
+
+# Componentes de Animal
+from app.dao.animal_dao import Animal_DAO
+from app.views.animal_view import Animal_View
+from app.controllers.animal_controller import Animal_Controller
+
+# Componentes de Vacina
+from app.dao.vacina_dao import Vacina_DAO
+from app.views.vacina_view import Vacina_View
+from app.controllers.vacina_controller import Vacina_Controller
+
+# Componentes de Aplicacao_Vacina
+from app.dao.aplicacao_vacina_dao import Aplicacao_Vacina_DAO
+from app.views.aplicacao_vacina_view import Aplicacao_Vacina_View
+from app.controllers.aplicacao_vacina_controller import Aplicacao_Vacina_Controller
 
 import tkinter as tk
 
@@ -33,6 +48,9 @@ class ErpApplication:
         self._janela_raca= None
         self._janela_agendamento = None
         self._janela_cliente = None
+        self._janela_animal = None 
+        self._janela_vacina = None 
+        self._janela_aplicacao_vacina = None
 
         # ================================
         # RACA
@@ -73,6 +91,45 @@ class ErpApplication:
             view=None
         )
 
+         # ==================================
+        # ANIMAL
+        # ==================================
+
+        self._dao_animal = Animal_DAO(
+            self._database
+        )
+        
+        self._ctrl_animal = Animal_Controller(
+            dao=self._dao_animal,
+            view=None
+        )
+
+         # ==================================
+        # VACINA
+        # ==================================
+
+        self._dao_vaicna = Vacina_DAO(
+            self._database
+        )
+        
+        self._ctrl_vacina = Vacina_Controller(
+            dao=self._dao_vacina,
+            view=None
+        )
+
+         # ==================================
+        # APLICACAO_VACINA
+        # ==================================
+
+        self._dao_aplicacao_vacina = Aplicacao_Vacina_DAO(
+            self._database
+        )
+        
+        self._ctrl_aplicacao_vacina = Aplicacao_Vacina_Controller(
+            dao=self._dao_aplicacao_vacina,
+            view=None
+        )
+
     def _configurar_janela(self):
         titulo = "Sistema Corporativo ERP"
         if self._usuario_logado is not None:
@@ -95,6 +152,18 @@ class ErpApplication:
         )
         menu_principal.add_cascade(
             label=("Menu de agendamento"),
+            menu=menu_cadastros_basicos
+        )
+        menu_principal.add_cascade(
+            label=("Menu de animal"),
+            menu=menu_cadastros_basicos
+        )
+        menu_principal.add_cascade(
+            label=("Menu de vacina"),
+            menu=menu_cadastros_basicos
+        )
+        menu_principal.add_cascade(
+            label=("Menu de aplicação de vacina"),
             menu=menu_cadastros_basicos
         )
 
@@ -157,6 +226,26 @@ class ErpApplication:
             self._ctrl_agendamento
         )
     
+    def _abrir_animal(self):
+        self._abrir_animal(
+            "janela_animal",
+            Animal_View,
+            self._ctrl_animal
+        )
+
+    def _abrir_vacina(self):
+        self._abrir_vacina(
+            "janela_vacina",
+            Vacina_View,
+            self._ctrl_vacina
+        )
+
+    def _abrir_aplicacao_vacina(self):
+        self._abrir_aplicacao_vacina(
+            "janela_aplicacao_vacina",
+            Aplicacao_Vacina_View,
+            self._ctrl_aplicacao_vacina
+        )
     def run(self):
         self._root.mainloop()
 
