@@ -32,4 +32,4 @@ class Data_Utils:
         idade = hoje.year - data_inicio.year
         if(hoje.month, hoje.day) < (data_inicio.month, data_inicio.day):
             idade -= 1
-        return idade
+        return idade    
