@@ -1,6 +1,6 @@
 from app.models.aplicacao_vacina import Aplicacao_Vacina
 from app.core.data_utils import Data_Utils
-class Usuario_Controller:
+class Aplicacao_Vacina_Controller:
 
     def __init__(self, dao, tipo_servico_dao, data_vacina_dao, horario_vacina_dao, status_vacina_dao, animal_id, vacina_id, view):
         self.dao = dao

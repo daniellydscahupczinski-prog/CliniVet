@@ -1,5 +1,3 @@
-from app.models.vacina import Vacina
-from app.core.data_utils import Data_Utils
 
 import tkinter as tk
 from tkinter import messagebox

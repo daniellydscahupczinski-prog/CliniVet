@@ -1,6 +1,6 @@
 from app.models.animal import Animal
 from app.core.data_utils import Data_Utils
-class Usuario_Controller:
+class Animal_Controller:
 
     def __init__(self, dao,nome_dao , data_nascimento_dao , sexo_dao , peso_dao , cliente_id, especie_id , raca_id, view):
         self.dao = dao
