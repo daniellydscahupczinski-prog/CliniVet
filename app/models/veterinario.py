@@ -58,3 +58,5 @@ class Veterinário:
         self._rg = novo_rg
         self._telefone = novo_telefone
         self._especialidade = nova_especialidade
+
+    

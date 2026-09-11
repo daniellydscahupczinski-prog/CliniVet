@@ -45,9 +45,9 @@ class Consulta_DAO(DAO):
             cursor.execute(sql)
             registros = cursor.fetchall()
 
-            consulta = []
+            consultas = []
             for registro in registros:
-                consulta.append(
+                consultas.append(
                     Consulta(
                         registro[0],
                         registro[1],
@@ -55,7 +55,7 @@ class Consulta_DAO(DAO):
                         registro[3]
                     )
                 )
-            return consulta
+            return consultas
         finally:
             self.desconectar(cursor,conexao)
 

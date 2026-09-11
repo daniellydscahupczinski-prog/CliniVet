@@ -6,6 +6,7 @@ from tkinter import ttk
 class Consulta_View:
     def __init__(self,root,controller):
         self.root = root
+        self.veterinarios = []
         self.controller = controller
        
         self.configurar_janela()
@@ -148,13 +149,39 @@ class Consulta_View:
             pady =5, 
             sticky = "w"
         )
+        self.lbl_veterinario = tk.Label(
+            self.frm_dados,
+            text="VETERINÁRIO"
+        )
+
+        self.lbl_veterinario.grid(
+            row=4,
+            column=0,
+            padx=5,
+            pady=5,
+            sticky="w"
+        )
+
+        self.cmb_veterinario = ttk.Combobox(
+            self.frm_dados,
+            width=37,
+            state="readonly"
+        )
+
+        self.cmb_veterinario.grid(
+            row=4,
+            column=1,
+            padx=5,
+            pady=5,
+            sticky="w"
+        )
         self.frm_botoes = tk.Frame(
             self.frm_dados,
             border = 2,
             relief = "groove"
         )
         self.frm_botoes.grid(
-            row = 4,
+            row = 5,
             column = 0,
             padx = 10,
             pady = 5,
@@ -225,7 +252,8 @@ class Consulta_View:
             "id",
             "data_consulta",
             "horario_consulta",
-            "observacoes"
+            "observacoes",
+            "veterinario"
         )
         self.tbl_consulta.column(
             "#0",
@@ -251,6 +279,10 @@ class Consulta_View:
             width = 300
 
         )
+        self.tbl_consulta.column(
+             "veterinario", 
+             width = 150
+        )
         self.tbl_consulta.heading(
             "id",
             text = "ID"
@@ -265,8 +297,12 @@ class Consulta_View:
             text = "HORARIO_CONSULTA"
         )
         self.tbl_consulta.heading(
-            "obervacoes",
+            "observacoes",
             text = "OBSERVAÇÕES"
+        )
+        self.tbl_consulta.heading(
+             "veterinario",
+             text = "VETERINARIO"
         )
     def configurar_eventos(self):
         self.btn_novo.config(
@@ -324,6 +360,7 @@ class Consulta_View:
             self.txt_data_consulta.delete(0,tk.END)
             self.cmb_horario_consulta.delete(0,tk.END)
             self.txt_observacoes.delete(0, tk.END)
+            self.cmb_veterinario.delete(0, tk.END)
     def limpar_treeview(self):
          for item in self.tbl_consulta.get_children():
               self.tbl_consulta.delete(item)
@@ -341,7 +378,31 @@ class Consulta_View:
          data_consulta = self.txt_data_consulta.get()
          horario_consulta = self.cmb_horario_consulta.get()
          observacoes = self.txt_observacoes.get()
-         return data_consulta, horario_consulta, observacoes 
+         return data_consulta, horario_consulta, observacoes
+    def carregar_veterinarios(self, veterinarios):
+        self.veterinarios = veterinarios
+
+        self.cmb_veterinario["values"] = [
+        veterinario.nome for veterinario in veterinarios
+    ]
+        
+    def get_veterinario_selecionado(self):
+        indice = self.cmb_veterinario.current()
+
+        if indice == -1:
+            return None
+
+        return self.veterinarios[indice]
+    def carregar_veterinarios(self, veterinarios):
+        self.veterinarios = veterinarios
+
+        self.cmb_veterinario["values"] = [
+            veterinario.nome
+            for veterinario in veterinarios
+        ]
+    
+        
+
     def exibir_mensagem(self, mensagem, sucesso = True):
          if sucesso: 
               messagebox.showinfo(
@@ -356,31 +417,23 @@ class Consulta_View:
                    parent=self.root
               )
     def exibir_consulta(self, consultas):
-         self._limpar_treeview()
 
-         for consulta in consultas: 
-              self.tbl_fornecedores.insert(
-                   "",
-                   tk.END,
-                   values=(
-                        consulta.data,
-                        consulta.horario,
-                        consulta.id
-                   )
-              )
+        self.limpar_treeview()
+
+        for consulta in consultas:
+            self.tbl_consulta.insert(
+                "",
+                tk.END,
+                values=(
+                    consulta.id,
+                    consulta.data_consulta,
+                    consulta.horario_consulta,
+                    consulta.observacoes,
+                    consulta.veterinario
+                )
+            )
     def fechar(self): 
          self.root.destroy()
 
     def iniciar(self):
          self.controller.get_all()
-
-
-              
-              
-
-
-
-        
-
-
-
