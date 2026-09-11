@@ -2,9 +2,8 @@
 from app.models.cliente import Cliente
 
 class Cliente_Controller:
-    def __init__(self, dao, estado_dao, view):
+    def __init__(self, dao, view):
         self.dao = dao
-        self.estado_dao = estado_dao
         self.view = view
         self.cidade_selecionada = None
         self.cliente_selecionada = None

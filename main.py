@@ -8,8 +8,9 @@ from app.controllers.raca_controller import Raca_Controller
 
 # Componentes de Cliente
 from app.dao.cliente_dao import Cliente_DAO
+from app.dao.animal_dao import Animal_DAO
 from app.views.cliente_view import Cliente_View
-from app.controllers import cliente_controller
+from app.controllers.cliente_controller import Cliente_Controller
 
 # Componentes de Agendamento
 from app.dao.agendamento_dao import Agendamento_DAO
@@ -33,10 +34,10 @@ from app.controllers.aplicacao_vacina_controller import Aplicacao_Vacina_Control
 
 import tkinter as tk
 
+
 class ErpApplication:
 
     def __init__(self):
-
         init(autoreset=True)
 
         self._database = Database()
@@ -45,7 +46,7 @@ class ErpApplication:
 
         self._usuario_logado = None
 
-        self._janela_raca= None
+        self._janela_raca = None
         self._janela_agendamento = None
         self._janela_cliente = None
         self._janela_animal = None 
@@ -55,25 +56,25 @@ class ErpApplication:
         # ================================
         # RACA
         # ================================
-
-        self._dao_raca  = Raca_DAO(
+        self._dao_raca = Raca_DAO(
             self._database
         )
-
         self._ctrl_raca = Raca_Controller(
-            dao = self._dao_raca,
-            view = None
+            dao=self._dao_raca,
+            view=None
         )
 
         # ==================================
         # CLIENTE
         # =================================
-        
-        self._dao_cliente = Cliente_DAO(
+        self._dao_animal = Animal_DAO(
             self._database
         )
-
-        self._ctrl_cliente = cliente_controller(
+        self._dao_cliente = Cliente_DAO(
+            self._database,
+            self._dao_animal
+        )
+        self._ctrl_cliente = Cliente_Controller(
             dao=self._dao_cliente,
             view=None
         )
@@ -81,11 +82,9 @@ class ErpApplication:
         # ==================================
         # AGENDAMENTO
         # ==================================
-
         self._dao_agendamento = Agendamento_DAO(
             self._database
         )
-        
         self._ctrl_agendamento = Agendamento_Controller(
             dao=self._dao_agendamento,
             view=None
@@ -132,24 +131,28 @@ class ErpApplication:
 
     def _configurar_janela(self):
         titulo = "Sistema Corporativo ERP"
+
         if self._usuario_logado is not None:
             titulo = f"{titulo} — {self._usuario_logado.nome} ({self._usuario_logado.perfil.nome})"
+
         self._root.title(titulo)
         self._root.state("zoomed")
 
     def _criar_menu(self):
-
         menu_principal = tk.Menu(self._root)
 
         menu_cadastros_basicos = tk.Menu(menu_principal, tearoff=0)
+
         menu_cadastros_basicos.add_command(
             label=("Menu de raca"),
             command=self._abrir_raca
         )
+
         menu_cadastros_basicos.add_command(
             label=("Menu de cliente"),
             command=self._abrir_cliente
         )
+
         menu_principal.add_cascade(
             label=("Menu de agendamento"),
             menu=menu_cadastros_basicos
@@ -167,14 +170,14 @@ class ErpApplication:
             menu=menu_cadastros_basicos
         )
 
+        self._root.config(menu=menu_principal)
 
     def _abrir_janela(
         self,
         atributo_janela,
         classe_view,
         controller
-    ):   
-
+    ):
         janela_existente = getattr(
             self,
             atributo_janela
@@ -206,22 +209,22 @@ class ErpApplication:
         controller.view.iniciar()
 
     def _abrir_raca(self):
-        self._abrir_raca(
+        self._abrir_janela(
             "_janela_raca",
             Raca_View,
             self._ctrl_raca
         )
-    
+
     def _abrir_cliente(self):
-        self._abrir_cliente(
+        self._abrir_janela(
             "_janela_cliente",
             Cliente_View,
             self._ctrl_cliente
         )
 
     def _abrir_agendamento(self):
-        self._abrir_agendamento(
-            "janela_agendamento",
+        self._abrir_janela(
+            "_janela_agendamento",
             Agendamento_View,
             self._ctrl_agendamento
         )
@@ -251,8 +254,5 @@ class ErpApplication:
 
 
 if __name__ == "__main__":
-
     app = ErpApplication()
-
     app.run()
-    
