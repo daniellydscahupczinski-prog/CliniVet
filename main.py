@@ -18,7 +18,7 @@ from app.controllers.agendamento_controller import Agendamento_Controller
 
 import tkinter as tk
 
-class erpApplication:
+class ErpApplication:
 
     def __init__(self):
 
