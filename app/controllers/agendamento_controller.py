@@ -15,10 +15,9 @@ class Agendamento_Controller:
 
     def save(self):
         try:
-            nome, servico_agendamento, horario_agendamento, data_agendamento, status_agendamento = self.view.ler_dados_agendamento()
+            servico_agendamento, horario_agendamento, data_agendamento, status_agendamento = self.view.ler_dados_agendamento()
             agendamento = Agendamento(
                 None,
-                nome,
                 servico_agendamento,
                 horario_agendamento,
                 data_agendamento,
@@ -48,9 +47,8 @@ class Agendamento_Controller:
             if self.agendamento_selecionado is None:
                 self.view.exibir_mensagem((("Selecione um agendamento da lista", False)))
                 return
-            nome, servico_agendamento, horario_agendamento, data_agendamento, status_agendamento = self.view.ler_dados_agendamento()
+            servico_agendamento, horario_agendamento, data_agendamento, status_agendamento = self.view.ler_dados_agendamento()
             self.agendamento_selecionado.atualizar_dados(
-                nome,
                 servico_agendamento,
                 horario_agendamento,
                 data_agendamento,
@@ -79,7 +77,3 @@ class Agendamento_Controller:
                 self.view.exibir_mensagem((("Agendamento nao encontrado", False)))
         except Exception as e:
             self.view.exibir_mensagem((("Problomas ao excluir agendamento", False)))
-
-
-
-   

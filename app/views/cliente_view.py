@@ -96,7 +96,7 @@ class Cliente_View:
             text = ("Numero de telefone:")
         )
         self.lbl_telefone.grid(
-            row = 1,
+            row = 2,
             column = 0,
             padx = 5,
             pady = 5,
@@ -107,7 +107,7 @@ class Cliente_View:
             width = 40
         )
         self.txt_telefone.grid(
-            row = 1,
+            row = 2,
             column = 1,
             padx = 5,
             pady = 5,
@@ -118,7 +118,7 @@ class Cliente_View:
             text = ("Numero do cpf:")
         )
         self.lbl_cpf.grid(
-            row = 1,
+            row = 3,
             column = 0,
             padx = 5,
             pady = 5,
@@ -129,7 +129,7 @@ class Cliente_View:
             width = 40
         )
         self.txt_cpf.grid(
-            row = 1,
+            row = 3,
             column = 1,
             padx = 5,
             pady = 5,
@@ -140,7 +140,7 @@ class Cliente_View:
             text = ("Animal:")
         )
         self.lbl_animal.grid(
-            row = 2,
+            row = 4,
             column = 0,
             padx = 5,
             pady = 5,
@@ -152,7 +152,7 @@ class Cliente_View:
             state = "readonly"
         )
         self.cmb_animal.grid(
-            row = 2,
+            row = 4,
             column = 1,
             padx = 5,
             pady = 5,
@@ -164,7 +164,7 @@ class Cliente_View:
             relief = "groove"
         )
         self.frm_botoes.grid(
-            row = 3,
+            row = 5,
             column = 0,
             padx = 10,
             pady = 5,
@@ -172,7 +172,7 @@ class Cliente_View:
         )
         self.btn_novo = tk.Button(
             self.frm_botoes,
-            text = (("novo:")),
+            text = (("Novo")),
             width = 15
         )
         self.btn_novo.grid(
@@ -183,7 +183,7 @@ class Cliente_View:
         )
         self.btn_salvar = tk.Button(
             self.frm_botoes,
-            text = (("salvar")),
+            text = (("Salvar")),
             width = 15
         )
         self.btn_salvar.grid(
@@ -194,7 +194,7 @@ class Cliente_View:
         )
         self.btn_alterar = tk.Button(
             self.frm_botoes,
-            text = (("alterar")),
+            text = (("Alterar")),
             width = 15
         )
         self.btn_alterar.grid(
@@ -205,7 +205,7 @@ class Cliente_View:
         )
         self.btn_excluir = tk.Button(
             self.frm_botoes,
-            text = (("excluir")),
+            text = (("Excluir")),
             width = 15
         )
         self.btn_excluir.grid(
@@ -216,7 +216,7 @@ class Cliente_View:
         )
         self.btn_fechar = tk.Button(
             self.frm_botoes,
-            text = (("fechar")),
+            text = (("Fechar")),
             width = 15
         )
         self.btn_fechar.grid(
@@ -307,9 +307,9 @@ class Cliente_View:
         self.btn_fechar.config(
             command = self.fechar
         )
-        self.tbl_cidades.bind(
+        self.tbl_cliente.bind(
             "<<TreeviewSelect>>",
-            self.controller.selecionar_cidade
+            self.controller.selecionar_cliente
 
         )
     def carregar_animal(self, animal):
@@ -417,15 +417,3 @@ class Cliente_View:
     def iniciar(self):
         self.controller.carregar_animal()
         self.controller.get_all()
- 
-    
-
-
-
-
-
-
-
-
-
-

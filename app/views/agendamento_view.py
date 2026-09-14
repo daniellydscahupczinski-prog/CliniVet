@@ -1,4 +1,3 @@
-
 from app.models.agendamento import Agendamento
 import tkinter as tk
 from tkinter import messagebox
@@ -123,19 +122,18 @@ class Agendamento_View:
             self.frm_dados,
             text = "Data do agendamento"
         )
-        self.lbl_id.grid(
+        self.lbl_data_agendamento.grid(
             row = 2,
             column = 0,
             padx = 5,
             pady = 5,
             sticky = "w"
         )
-        self.txt_id = tk.Entry(
+        self.txt_data_agendamento = tk.Entry(
             self.frm_dados,
-            width = 20,
-            state = "readonly"
+            width = 20
         )
-        self.txt_id.grid(
+        self.txt_data_agendamento.grid(
             row = 2,
             column= 1,
             padx = 5,
@@ -245,7 +243,7 @@ class Agendamento_View:
             sticky = "nsew"
         )
     def configurar_treeview(self):
-        self.tbl_clientes["columns"] = (
+        self.tbl_agendamento["columns"] = (
             "id",
             "servico_agendamento",
             "horario_agendamento",
@@ -277,11 +275,6 @@ class Agendamento_View:
             anchor = "center"
         )
         self.tbl_agendamento.column(
-            "limite",
-            width = 20,
-            anchor = "e"
-        )
-        self.tbl_agendamento.column(
             "status_agendamento",
             width = 30
         )
@@ -290,7 +283,7 @@ class Agendamento_View:
             text = "ID"
         )
         self.tbl_agendamento.heading(
-            "servicos",
+            "servico_agendamento",
             text = "Servicos"
         )
         self.tbl_agendamento.heading(
@@ -298,11 +291,11 @@ class Agendamento_View:
             text = "Horario"
         )
         self.tbl_agendamento.heading(
-            "Data",
+            "data_agendamento",
             text = "Data"
         )
         self.tbl_agendamento.heading(
-            "status",
+            "status_agendamento",
             text = "Status do agendamento"
         )
     def configurar_eventos(self):
@@ -336,22 +329,22 @@ class Agendamento_View:
         )
         self.txt_id.config(state="readonly")
 
-        self.txt_servico.insert(
+        self.txt_servico_agendamento.insert(
         0,
         agendamento.servico_agendamento
         )
 
-        self.txt_horario.insert(
+        self.txt_horario_agendamento.insert(
         0,
         agendamento.horario_agendamento
         )
 
-        self.txt_data.insert(
+        self.txt_data_agendamento.insert(
         0,
         agendamento.data_agendamento
         )
 
-        self.cmb_status.set(
+        self.cmb_status_agendamento.set(
         agendamento.status_agendamento
         )
     def limpar_campos(self):
@@ -359,13 +352,13 @@ class Agendamento_View:
         self.txt_id.delete(0, tk.END)
         self.txt_id.config(state="readonly")
 
-        self.txt_servico.delete(0, tk.END)
-        self.txt_horario.delete(0, tk.END)
-        self.txt_data.delete(0, tk.END)
+        self.txt_servico_agendamento.delete(0, tk.END)
+        self.txt_horario_agendamento.delete(0, tk.END)
+        self.txt_data_agendamento.delete(0, tk.END)
 
-        self.cmb_status.set("")
+        self.cmb_status_agendamento.set("")
 
-        self.txt_servico.focus()   
+        self.txt_servico_agendamento.focus()   
 
     def limpar_treeview(self):
         for item in self.tbl_agendamento.get_children():
@@ -386,10 +379,10 @@ class Agendamento_View:
         )
 
     def ler_dados_agendamento(self):
-        servico_agendamento = self.txt_servico.get()
-        horario_agendamento = self.txt_horario.get()
-        data_agendamento = self.txt_data.get()
-        status_agendamento = self.cmb_status.get()
+        servico_agendamento = self.txt_servico_agendamento.get()
+        horario_agendamento = self.txt_horario_agendamento.get()
+        data_agendamento = self.txt_data_agendamento.get()
+        status_agendamento = self.cmb_status_agendamento.get()
 
         return servico_agendamento, horario_agendamento, data_agendamento, status_agendamento
     
@@ -413,7 +406,7 @@ class Agendamento_View:
 
         for agendamento in agendamento:
 
-            self.tbl_clientes.insert(
+            self.tbl_agendamento.insert(
                 "",
                 tk.END,
                 values=(
