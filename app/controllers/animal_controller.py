@@ -107,7 +107,7 @@ class Animal_Controller:
                 )
             else:
                 self.view.exibir_mensagem(
-                    ("Usuário não encontrado."),
+                    ("Animal não encontrado."),
                     False
                 )
         except Exception:

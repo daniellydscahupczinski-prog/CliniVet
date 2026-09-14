@@ -1,4 +1,5 @@
-from colorama import init, Fore, Style
+from colorama import init
+
 from app.core.database import Database
 
 # Componentes de Raca
@@ -35,18 +36,19 @@ from app.controllers.aplicacao_vacina_controller import Aplicacao_Vacina_Control
 
 # Componentes de Animal
 from app.dao.animal_dao import Animal_DAO
-from app.views.animal_view import Animal_View
+from app.view.animal_view import Animal_View
 from app.controllers.animal_controller import Animal_Controller
 
 # Componentes de Vacina
 from app.dao.vacina_dao import Vacina_DAO
-from app.views.vacina_view import Vacina_View
+from app.view.vacina_view import Vacina_View
 from app.controllers.vacina_controller import Vacina_Controller
 
-# Componentes de Aplicacao_Vacina
+# Componentes de Aplicacao_vacina
 from app.dao.aplicacao_vacina_dao import Aplicacao_Vacina_DAO
-from app.views.aplicacao_vacina_view import Aplicacao_Vacina_View
+from app.view.aplicacao_vacina_view import Aplicacao_Vacina_View
 from app.controllers.aplicacao_vacina_controller import Aplicacao_Vacina_Controller
+
 
 import tkinter as tk
 
@@ -67,7 +69,7 @@ class ErpApplication:
         self._janela_cliente = None
         self._janela_animal = None
         self._janela_vacina = None
-        self._janela_aplicacao_vacina = None
+        self._janela_aplicacao_vacina = None 
 
         # ================================
         # RACA
@@ -154,8 +156,6 @@ class ErpApplication:
             view=None
         )
 
-
-
         self._configurar_janela()
         self._criar_menu()
 
@@ -194,17 +194,20 @@ class ErpApplication:
             label=("Menus"),
             menu=menu_cadastros_basicos
         )
-        menu_principal.add_cascade(
+
+        menu_cadastros_basicos.add_command(
             label=("Menu de animal"),
-            menu=menu_cadastros_basicos
+            command=self._abrir_agendamento
         )
-        menu_principal.add_cascade(
+
+        menu_cadastros_basicos.add_command(
             label=("Menu de vacina"),
-            menu=menu_cadastros_basicos
+            command=self._abrir_agendamento
         )
-        menu_principal.add_cascade(
-            label=("Menu de aplicação de vacina"),
-            menu=menu_cadastros_basicos
+
+        menu_cadastros_basicos.add_command(
+            label=("Menu de aplicação da vacina"),
+            command=self._abrir_agendamento
         )
 
         menu_principal.add_command(
@@ -285,17 +288,17 @@ class ErpApplication:
             Agendamento_View,
             self._ctrl_agendamento
         )
-    
+
     def _abrir_animal(self):
-        self._abrir_animal(
-            "janela_animal",
+        self._abrir_janela(
+            "_janela_animal",
             Animal_View,
             self._ctrl_animal
         )
 
     def _abrir_vacina(self):
         self._abrir_vacina(
-            "janela_vacina",
+            "_janela_vacina",
             Vacina_View,
             self._ctrl_vacina
         )
@@ -319,24 +322,6 @@ class ErpApplication:
             "_janela_aplicacao_vacina",
             Aplicacao_Vacina_View,
             self._ctrl_aplicacao_vacina
-        )
-
-    def _abrir_agenda_dia(self):
-        if (
-            self._janela_agenda_dia is not None
-            and self._janela_agenda_dia.winfo_exists()
-        ):
-            self._janela_agenda_dia.lift()
-            self._janela_agenda_dia.focus_force()
-            return
-
-        self._janela_agenda_dia = tk.Toplevel(
-            self._root
-        )
-
-        Agenda_Dia_View(
-            self._janela_agenda_dia,
-            self._dao_agendamento
         )
 
     def run(self):
