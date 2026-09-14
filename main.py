@@ -17,6 +17,22 @@ from app.controllers.cliente_controller import Cliente_Controller
 from app.dao.agendamento_dao import Agendamento_DAO
 from app.views.agendamento_view import Agendamento_View
 from app.controllers.agendamento_controller import Agendamento_Controller
+from app.views.agenda_dia_view import Agenda_Dia_View
+
+# Componentes de Animal
+from app.dao.animal_dao import Animal_DAO
+from app.view.animal_view import Animal_View
+from app.controllers.animal_controller import Animal_Controller
+
+# Componentes de Vacina
+from app.dao.vacina_dao import Vacina_DAO
+from app.view.vacina_view import Vacina_View
+from app.controllers.vacina_controller import Vacina_Controller
+
+# Componentes de Aplicacao_vacina
+from app.dao.aplicacao_vacina_dao import Aplicacao_Vacina_DAO
+from app.view.aplicacao_vacina_view import Aplicacao_Vacina_View
+from app.controllers.aplicacao_vacina_controller import Aplicacao_Vacina_Controller
 
 # Componentes de Animal
 from app.dao.animal_dao import Animal_DAO
@@ -152,6 +168,8 @@ class ErpApplication:
         self._root.title(titulo)
         self._root.state("zoomed")
 
+        
+
     def _criar_menu(self):
         menu_principal = tk.Menu(self._root)
 
@@ -175,6 +193,26 @@ class ErpApplication:
         menu_principal.add_cascade(
             label=("Menus"),
             menu=menu_cadastros_basicos
+        )
+
+        menu_cadastros_basicos.add_command(
+            label=("Menu de animal"),
+            command=self._abrir_agendamento
+        )
+
+        menu_cadastros_basicos.add_command(
+            label=("Menu de vacina"),
+            command=self._abrir_agendamento
+        )
+
+        menu_cadastros_basicos.add_command(
+            label=("Menu de aplicação da vacina"),
+            command=self._abrir_agendamento
+        )
+
+        menu_principal.add_command(
+            label=("Agenda do dia"),
+            command=self._abrir_agenda_dia
         )
 
         menu_cadastros_basicos.add_command(
@@ -249,6 +287,20 @@ class ErpApplication:
             "_janela_agendamento",
             Agendamento_View,
             self._ctrl_agendamento
+        )
+
+    def _abrir_animal(self):
+        self._abrir_janela(
+            "_janela_animal",
+            Animal_View,
+            self._ctrl_animal
+        )
+
+    def _abrir_vacina(self):
+        self._abrir_vacina(
+            "_janela_vacina",
+            Vacina_View,
+            self._ctrl_vacina
         )
 
     def _abrir_animal(self):
