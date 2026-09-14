@@ -1,4 +1,3 @@
-
 from app.dao.dao import DAO
 from app.models.raca import Raca
 

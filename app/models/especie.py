@@ -20,3 +20,4 @@ class Especie:
     def atualizar_dados(self, novo_id, novo_nome):
         self._nome = novo_nome 
         self._id = novo_id
+        
