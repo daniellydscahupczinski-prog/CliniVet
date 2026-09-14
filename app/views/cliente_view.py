@@ -15,7 +15,7 @@ class Cliente_View:
         self.configurar_eventos()
 
     def configurar_janela(self):
-        self.root.title((("Crud de Clientes")))
+        self.root.title("Crud de Clientes")
         self.root.geometry("800x600")
         self.root.resizable(False, False)
 

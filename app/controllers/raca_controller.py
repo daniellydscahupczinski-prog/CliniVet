@@ -23,7 +23,7 @@ class Raca_Controller:
             )
             self.dao.save(cliente)
             self.get_all()
-            self.view.exibir_mensagem((("Raca cadastrada com sucesso!")))
+            self.view.exibir_mensagem((("Raça cadastrada com sucesso!")))
         except ValueError as e:
             self.view.exibir_mensagem(f"Erro: {str(e)}", False)
 
@@ -49,7 +49,7 @@ class Raca_Controller:
     def update(self):
         try:
             if self.cliente_selecionado is None:
-                self.view.exibir_mensagem((("Selecione uma raca da lista", False)))
+                self.view.exibir_mensagem((("Selecione uma raça da lista", False)))
                 return
             nome = self.view.ler_dados_cliente()
             self.raca_selecionada.atualizar_dados(
@@ -58,13 +58,13 @@ class Raca_Controller:
             )
             self.dao.update(self.cliente_selecionado)
             self.get_all()
-            self.view.exibir_mensagem((("raca atualizada")))
+            self.view.exibir_mensagem((("Raça atualizada")))
         except ValueError as e:
             self.view.exibir_mensagem(f"Erro: {str(e)}", False)
 
     def delete(self):
         if self.cliente_selecionado is None:
-            self.view.exibir_mensagem((("Selecione uma raca na lista", False)))
+            self.view.exibir_mensagem((("Selecione uma raça na lista", False)))
             return
         if not self.view.confirmar_exclusao():
             return
@@ -74,9 +74,9 @@ class Raca_Controller:
                 self.cliente_selecionado = None
                 self.view.limpar_campos()
                 self.get_all()
-                self.view.exibir_mensagem((("raca excluida com sucesso")))
+                self.view.exibir_mensagem((("Raça excluida com sucesso")))
             else:
-                self.view.exibir_mensagem((("Raca nao encontrada", False)))
+                self.view.exibir_mensagem((("Raça nao encontrada", False)))
         except Exception as e:
-            self.view.exibir_mensagem((("Problemas ao excluir raca", False)))
+            self.view.exibir_mensagem((("Problemas ao excluir raça", False)))
         

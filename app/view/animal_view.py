@@ -21,7 +21,7 @@ def configurar__janela(self):
 def criar_componentes(self):
     self.lbl_titulo = tk.Label(
         self.root,
-        text="Criação de animal",
+        text="Cadastro de animal",
         font=("Arial", 16, "bold"),
     )
     self.lbl_titulo.grid(
