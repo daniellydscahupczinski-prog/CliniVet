@@ -1,7 +1,8 @@
 class Especie_Controller:
 
-    def __init__(self, dao, especie_raca_dao, view):
+    def __init__(self, dao, especie_raca_dao,raca_dao, view):
         self.dao = dao
+        self.raca_dao = raca_dao
         self.especie_raca_dao = especie_raca_dao
         self.view = view
         self.especie_selecionada = None

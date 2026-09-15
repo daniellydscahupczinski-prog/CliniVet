@@ -4,11 +4,13 @@ from app.models.consulta import Consulta
 class Consulta_Controller:
     def __init__(
         self,
+        
         consulta_veterinario_dao,
         consulta_dao,
         veterinario_dao,
         view
     ):
+       
         self.consulta_veterinario_dao = consulta_veterinario_dao
         self.consulta_dao = consulta_dao
         self.veterinario_dao = veterinario_dao
@@ -74,6 +76,9 @@ class Consulta_Controller:
             )
         except IndexError:
             pass
+    def carregar_veterinarios(self):
+        veterinarios = self.veterinario_dao.get_all()
+        self.view.carregar_veterinarios(veterinarios)
     def update(self):
         try: 
             if self.consulta_selecionada is None: 

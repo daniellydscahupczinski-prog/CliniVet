@@ -24,7 +24,101 @@ class Especie_Raca_DAO(DAO):
 
         self.cursor.execute(sql, valores)
         self.conn.commit()
+    def get_all(self):
 
+        conexao = self._database.conectar()
+        cursor = conexao.cursor()
+
+        try:
+            sql = """
+                SELECT ID_ESPECIE, ID_RACA
+                FROM ESPECIE_RACA
+            """
+
+            cursor.execute(sql)
+
+            registros = cursor.fetchall()
+
+            relacionamentos = []
+
+            for registro in registros:
+                relacionamentos.append(
+                    Especie_Raca(
+                        registro[0],
+                        registro[1]
+                    )
+                )
+
+            return relacionamentos
+        finally:
+            self._database.desconectar(
+                cursor,
+                conexao
+            )
+    def get_by_id(self, especie_id):
+
+        conexao = self._database.conectar()
+        cursor = conexao.cursor()
+
+        try:
+            sql = """
+                SELECT ID_ESPECIE, ID_RACA
+                FROM ESPECIE_RACA
+                WHERE ID_ESPECIE = %s
+            """
+
+            cursor.execute(
+                sql,
+                (especie_id,)
+            )
+
+            registro = cursor.fetchone()
+
+            if registro:
+                return Especie_Raca(
+                    registro[0],
+                    registro[1]
+                )
+
+            return None
+
+        finally:
+            self._database.desconectar(
+                cursor,
+                conexao
+            )
+
+    def update(self, especie_raca):
+
+        conexao = self._database.conectar()
+        cursor = conexao.cursor()
+
+        try:
+            sql = """
+                UPDATE ESPECIE_RACA
+                SET ID_RACA = %s
+                WHERE ID_ESPECIE= %s
+            """
+
+            cursor.execute(
+                sql,
+                (
+                    especie_raca.raca_id,
+                    especie_raca.especie_id
+                )
+            )
+
+            conexao.commit()
+
+        except Exception:
+            conexao.rollback()
+            raise
+
+        finally:
+            self._database.desconectar(
+                cursor,
+                conexao
+            )
     def get_by_especie(self, especie_id):
 
         sql = """

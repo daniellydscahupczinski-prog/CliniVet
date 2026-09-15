@@ -26,6 +26,12 @@ class Especie_DAO(DAO):
             raise
         finally: 
             self.desconectar(cursor,conexao)
+
+
+ 
+
+
+
     def get_all(self):
         conexao, cursor = self.conectar()
         try: 
@@ -54,7 +60,7 @@ class Especie_DAO(DAO):
         finally: 
             self.desconectar(cursor,conexao)
 
-    def get_by_id(self, raca_id):
+    def get_by_id_raca(self, raca_id):
         conexao, cursor = self.conectar()
         try: 
             sql = """
@@ -131,4 +137,29 @@ class Especie_DAO(DAO):
             conexao.rollback()
             raise
         finally: 
+            self.desconectar(cursor, conexao)
+    def delete(self, id):
+        conexao, cursor = self.conectar()
+
+        try:
+
+            sql = """
+                    DELETE
+                    FROM ESPECIE
+                    WHERE ID = %s
+                  """
+
+            cursor.execute(sql, (id,))
+
+            conexao.commit()
+
+            return cursor.rowcount > 0
+
+        except Exception:
+
+            conexao.rollback()
+            raise
+
+        finally:
+
             self.desconectar(cursor, conexao)
