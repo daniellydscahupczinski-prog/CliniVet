@@ -5,8 +5,12 @@ class Veterinario_Controller:
         self.view = view
         self.veterinario_selecionado = None
 
-    def new(self):
-        self.view.limpar_campos()
+class Veterinario_Controller:
+
+    def __init__(self,dao, view ):
+        self.dao = dao
+        self.view = view
+        self.veterinario_selecionado = None
 
     def save(self):
         try: 
