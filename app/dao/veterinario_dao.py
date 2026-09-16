@@ -17,7 +17,7 @@ class Veterinario_DAO(DAO):
                     veterinario.nome, 
                     veterinario.cpf,
                     veterinario.telefone, 
-                    veterinario.rs, 
+                    veterinario.rg, 
                     veterinario.especialidade
                 )
             )
@@ -97,7 +97,8 @@ class Veterinario_DAO(DAO):
                 veterinario.cpf, 
                 veterinario.telefone, 
                 veterinario.rg,
-                veterinario.especialidade
+                veterinario.especialidade,
+                veterinario.id
             ))
             conexao.commit()
             sucesso = cursor.rowcount > 0
@@ -112,7 +113,7 @@ class Veterinario_DAO(DAO):
         conexao, cursor = self.conectar()
         try: 
             sql = """
-                    DELETE FROM FORNECEDORES
+                    DELETE FROM VETERINARIO
                     WHERE ID = %s
 """
             cursor.execute(sql,(id,))
@@ -124,5 +125,3 @@ class Veterinario_DAO(DAO):
             raise
         finally: 
             self.desconectar(cursor, conexao)
-
-

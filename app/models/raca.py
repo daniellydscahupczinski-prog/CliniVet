@@ -20,7 +20,7 @@ class Raca:
 
     @property
     def nome(self):
-        return self.nome.upper()
+        return self._nome.upper()
     
     @nome.setter
     def nome(self, novo_nome):
@@ -28,11 +28,11 @@ class Raca:
 
     @property
     def especie_id(self):
-        return self.especie_id
+        return self._especie_id
     
     @especie_id.setter
     def especie_id(self, nova_especie_id):
-        self.especie_id = nova_especie_id
+        self._especie_id = nova_especie_id
 
     def atualizar_dados(
             self,
@@ -41,4 +41,3 @@ class Raca:
     ):
         self._nome = novo_nome
         self._especie_id = nova_especie_id
-        

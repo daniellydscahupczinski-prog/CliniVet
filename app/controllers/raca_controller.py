@@ -9,19 +9,21 @@ class Raca_Controller:
     ):
         self.dao = dao
         self.view = view
+        self.raca_selecionada = None
 
     def new(self):
         self.view.limpar_campos()
 
     def save(self):
         try:
-            nome = self.view.ler_dados_cliente()
-            cliente = Raca(
+            nome = self.view.ler_dados_raca()
+            especie_id = self.view.get_especie_selecionada()
+            raca = Raca(
                 None,
                 nome,
-                
+                especie_id
             )
-            self.dao.save(cliente)
+            self.dao.save(raca)
             self.get_all()
             self.view.exibir_mensagem((("Raca cadastrada com sucesso!")))
         except ValueError as e:
@@ -29,7 +31,7 @@ class Raca_Controller:
 
     def get_all(self):
         raca = self.dao.get_all()
-        self.view.exibir_raca(raca)
+        self.view.exibir_racas(raca)
 
     def selecionar_raca(self, event):
         try:
@@ -37,10 +39,9 @@ class Raca_Controller:
             self.raca_selecionada = self.dao.get_by_id(
                 id_raca
             )
-            
+
             self.view.preencher_campos(
-                self.raca_selecionado,
-                Raca
+                self.raca_selecionada
             )
 
         except IndexError:
@@ -48,30 +49,31 @@ class Raca_Controller:
 
     def update(self):
         try:
-            if self.cliente_selecionado is None:
+            if self.raca_selecionada is None:
                 self.view.exibir_mensagem((("Selecione uma raca da lista", False)))
                 return
-            nome = self.view.ler_dados_cliente()
+            nome = self.view.ler_dados_raca()
+            especie_id = self.view.get_especie_selecionada()
             self.raca_selecionada.atualizar_dados(
-                nome
-               
+                nome,
+                especie_id
             )
-            self.dao.update(self.cliente_selecionado)
+            self.dao.update(self.raca_selecionada)
             self.get_all()
             self.view.exibir_mensagem((("raca atualizada")))
         except ValueError as e:
-            self.view.exibir_mensagem(f"Erro: {str(e)}", False)
+            self.view.exibir_mensagem(f"Erro: s{str(e)}", False)
 
     def delete(self):
-        if self.cliente_selecionado is None:
+        if self.raca_selecionada is None:
             self.view.exibir_mensagem((("Selecione uma raca na lista", False)))
             return
         if not self.view.confirmar_exclusao():
             return
         try:
-            sucesso = self.dao.delete(self.cliente_selecionado.id)
+            sucesso = self.dao.delete(self.raca_selecionada.id)
             if sucesso:
-                self.cliente_selecionado = None
+                self.raca_selecionada = None
                 self.view.limpar_campos()
                 self.get_all()
                 self.view.exibir_mensagem((("raca excluida com sucesso")))
@@ -79,4 +81,3 @@ class Raca_Controller:
                 self.view.exibir_mensagem((("Raca nao encontrada", False)))
         except Exception as e:
             self.view.exibir_mensagem((("Problemas ao excluir raca", False)))
-        

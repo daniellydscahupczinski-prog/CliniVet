@@ -1,4 +1,4 @@
-class Veterinário: 
+class Veterinario: 
     def __init__(self, id, nome, cpf, telefone, rg, especialidade):
         self.id = id 
         self.nome = nome

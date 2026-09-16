@@ -1,7 +1,11 @@
+from app.models.especie import Especie
+
+
 class Especie_Controller:
 
-    def __init__(self, dao, especie_raca_dao, view):
+    def __init__(self, dao, raca_dao, especie_raca_dao, view):
         self.dao = dao
+        self.raca_dao = raca_dao
         self.especie_raca_dao = especie_raca_dao
         self.view = view
         self.especie_selecionada = None
@@ -76,6 +80,7 @@ class Especie_Controller:
         self.view.exibir_mensagem(
             "Raça adicionada à espécie com sucesso!"
         )
+
     def carregar_racas(self):
         racas = self.raca_dao.get_all()
         self.view.carregar_racas(racas)

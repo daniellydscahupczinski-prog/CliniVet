@@ -19,18 +19,19 @@ class Especie_DAO(DAO):
                 )
             )
             conexao.commit()
-            especie.id = cursor.lastrwid
+            especie.id = cursor.lastrowid
             return especie
         except Exception: 
             conexao.rollback()
             raise
         finally: 
             self.desconectar(cursor,conexao)
+
     def get_all(self):
         conexao, cursor = self.conectar()
         try: 
             sql = """
-                    SELECT ID, NOME
+                    SELECT ID, NOME, RACA_ID
                     FROM ESPECIE 
                     ORDER BY NOME
                 """
@@ -39,11 +40,11 @@ class Especie_DAO(DAO):
             especies = []
             for registro in registros: 
                 raca = self._raca_dao.get_by_id(
-                    registros[2]
+                    registro[2]
                 )
                 especies.append(
                     Especie( 
-                        registro [0],
+                        registro[0],
                         registro[1],
                         raca
                     )
@@ -54,7 +55,7 @@ class Especie_DAO(DAO):
         finally: 
             self.desconectar(cursor,conexao)
 
-    def get_by_id(self, raca_id):
+    def get_by_raca(self, raca_id):
         conexao, cursor = self.conectar()
         try: 
             sql = """
@@ -79,7 +80,7 @@ class Especie_DAO(DAO):
                         raca
                     )
                 )
-                return especies
+            return especies
         finally: 
             self.desconectar(cursor,conexao)
 
@@ -112,7 +113,7 @@ class Especie_DAO(DAO):
         try: 
             sql = """
                 UPDATE ESPECIE SET 
-                NOME = %s
+                NOME = %s,
                 RACA_ID = %s
                 WHERE 
                 ID = %s
@@ -121,7 +122,7 @@ class Especie_DAO(DAO):
             cursor.execute(
                 sql,(
                     especie.nome, 
-                    especie.raca_id,
+                    especie.raca.id,
                     especie.id
                 )
             )
@@ -131,4 +132,20 @@ class Especie_DAO(DAO):
             conexao.rollback()
             raise
         finally: 
+            self.desconectar(cursor, conexao)
+
+    def delete(self, id):
+        conexao, cursor = self.conectar()
+        try:
+            sql = """
+                DELETE FROM ESPECIE
+                WHERE ID = %s
+            """
+            cursor.execute(sql, (id,))
+            conexao.commit()
+            return cursor.rowcount > 0
+        except Exception:
+            conexao.rollback()
+            raise
+        finally:
             self.desconectar(cursor, conexao)

@@ -1,4 +1,5 @@
 from app.models.consulta import Consulta
+from app.models.consulta_veterinario import Consulta_Veterinario
 
 
 class Consulta_Controller:
@@ -39,13 +40,13 @@ class Consulta_Controller:
                 observacoes
             )
 
-
             self.consulta_dao.save(consulta)
 
-            self.consulta_veterinario_dao.save(
+            consulta_veterinario = Consulta_Veterinario(
                 consulta.id,
                 veterinario.id
             )
+            self.consulta_veterinario_dao.save(consulta_veterinario)
 
             self.get_all()
 
@@ -58,15 +59,14 @@ class Consulta_Controller:
                 "Erro ao cadastrar consulta!"
             )
 
-
     def get_all(self):
-        consultas = self.dao.get_all()
+        consultas = self.consulta_dao.get_all()
         self.view.exibir_consulta(consultas)
 
-    def selecionar_consulta(self,event):
-        try: 
+    def selecionar_consulta(self, event):
+        try:
             id_consulta = self.view.get_id_selecionado()
-            self.consulta_selecionada = self.dao.get_by_id(
+            self.consulta_selecionada = self.consulta_dao.get_by_id(
                 id_consulta
             )
             self.view.preencher_campos(
@@ -74,33 +74,34 @@ class Consulta_Controller:
             )
         except IndexError:
             pass
+
     def update(self):
-        try: 
-            if self.consulta_selecionada is None: 
+        try:
+            if self.consulta_selecionada is None:
                 self.view.exibir_mensagem("Selecione uma consulta da lista: ")
                 return
             data_consulta, horario_consulta, observacoes = self.view.ler_dados_consulta()
-            self.consulta_selecionada.atualizar_dados(data_consulta,horario_consulta,observacoes)
-            self.dao.update(self.consulta_selecionada)
+            self.consulta_selecionada.atualizar_dados(data_consulta, horario_consulta, observacoes)
+            self.consulta_dao.update(self.consulta_selecionada)
             self.get_all()
             self.view.exibir_mensagem("Consulta Atualizada com Sucesso!")
-        except ValueError as e: 
-            self.view.exibir_mensagem (f"Erro:", False)
+        except ValueError as e:
+            self.view.exibir_mensagem(f"Erro: {e}")
 
     def delete(self):
-        if self.consulta_selecionada is None: 
+        if self.consulta_selecionada is None:
             self.view.exibir_mensagem("Seleciona uma consulta da lista: ")
-            return 
+            return
         if not self.view.confirmar_exclusao():
             return
-        try: 
-            sucesso = self.dao.delete(self.consulta_selecionada.id)
-            if sucesso: 
+        try:
+            sucesso = self.consulta_dao.delete(self.consulta_selecionada.id)
+            if sucesso:
                 self.consulta_selecionada = None
                 self.view.limpar_campos()
                 self.get_all()
-                self.view.exibir_mensagem("Consulta Atualizada com sucesso!")
-            else: 
+                self.view.exibir_mensagem("Consulta excluída com sucesso!")
+            else:
                 self.view.exibir_mensagem("Consulta não encontrada!")
-        except Exception as e: 
-            self.view.exibir_mensagem("Erro ao exclur Consulta")
+        except Exception as e:
+            self.view.exibir_mensagem("Erro ao excluir Consulta")

@@ -2,20 +2,40 @@ from app.models.animal import Animal
 from app.core.data_utils import Data_Utils
 class Animal_Controller:
 
-    def __init__(self, dao,nome_dao , data_nascimento_dao , sexo_dao , peso_dao , cliente_id, especie_id , raca_id, view):
+    def __init__(self, dao, cliente_dao, especie_dao, raca_dao, view):
         self.dao = dao
         self.view = view
         self.animal_selecionado = None
-        self.nome_dao = nome_dao 
-        self.data_nascimento_dao = data_nascimento_dao
-        self.sexo_dao = sexo_dao
-        self.peso_dao = peso_dao
-        self.cliente_id = cliente_id
-        self.especie_id = especie_id
-        self.raca_id = raca_id
+        self.cliente_dao = cliente_dao
+        self.especie_dao = especie_dao
+        self.raca_dao = raca_dao
 
     def new(self):
         self.view.limpar_campos()
+
+    def save(self):
+        try:
+            nome, data_nascimento, sexo, peso, cliente_id, especie_id, raca_id = (
+                self.view.ler_dados_animal()
+            )
+
+            animal = Animal(
+                None,
+                nome,
+                Data_Utils.string_para_data(data_nascimento),
+                sexo,
+                peso,
+                cliente_id,
+                especie_id,
+                raca_id
+            )
+
+            self.dao.save(animal)
+            self.get_all()
+            self.view.exibir_mensagem("Animal cadastrado com sucesso!")
+
+        except ValueError as e:
+            self.view.exibir_mensagem(f"Erro: {str(e)}", False)
 
     def carregar_clientes(self):
         cliente = self.cliente_dao.get_all()
@@ -48,7 +68,7 @@ class Animal_Controller:
             raca = self.raca_dao.get_all()
 
             self.view.preencher_campos(
-                self.usuario_selecionado,
+                self.animal_selecionado,
                 cliente, especie, raca
             )
 
@@ -69,8 +89,8 @@ class Animal_Controller:
             self.animal_selecionado.atualizar_dados(
                 nome,
                 Data_Utils.string_para_data(data_nascimento),
-                peso,
                 sexo,
+                peso,
                 cliente,
                 especie,
                 raca
@@ -82,7 +102,7 @@ class Animal_Controller:
             )
         except ValueError as e:
             self.view.exibir_mensagem(
-                (("Erro: ")(str(e)), False),
+                f"Erro: {str(e)}",
                 False
             )
     def delete(self):

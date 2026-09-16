@@ -1,51 +1,51 @@
-from app.models.cliente import Cliente
-
+from app.models.raca import Raca
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
 
-class Cliente_View:
+class Raca_View:
     def __init__(self, root, controller):
         self.root = root
         self.controller = controller
-        self._estados = []
         self.configurar_janela()
         self.criar_componentes()
         self.configurar_treeview()
         self.configurar_eventos()
 
     def configurar_janela(self):
-        self.root.title((("Crud de Clientes")))
-        self.root.geometry("800x600")
+        self.root.title((("CRUD de Racas")))
+        self.root.geometry("900x600")
         self.root.resizable(False, False)
 
     def criar_componentes(self):
         self.lbl_titulo = tk.Label(
             self.root,
-            text = ("Cadastro de cliente"),
-            font = ("arial", 16, "bold")
+            text = (("Cadastro de raca")),
+            font = ("Arial", 16, "bold"),
         )
         self.lbl_titulo.grid(
             row = 0,
             column = 0,
-            columnspan = 2,
+            columnspan = 4,
             padx = 5,
             pady = 5
         )
         self.frm_dados = tk.LabelFrame(
             self.root,
-            text = ("Dados do cliente")
+            text = (("dados da raca"))
         )
         self.frm_dados.grid(
             row = 1,
             column = 0,
-            columnspan=2,
+            columnspan=4,
             padx = 10,
             pady = 5,
             sticky = "ew"
         )
         self.frm_dados.grid_columnconfigure(0, weight=0)
         self.frm_dados.grid_columnconfigure(1, weight=1)
+        self.frm_dados.grid_columnconfigure(2, weight=0)
+        self.frm_dados.grid_columnconfigure(3, weight=1)
         self.lbl_id = tk.Label(
             self.frm_dados,
             text = "ID:"
@@ -71,7 +71,7 @@ class Cliente_View:
         )
         self.lbl_nome = tk.Label(
             self.frm_dados,
-            text = ("Nome")
+            text = (("Nome"))
         )
         self.lbl_nome.grid(
             row = 1,
@@ -91,84 +91,17 @@ class Cliente_View:
             pady = 5,
             sticky = "w"
         )
-        self.lbl_telefone = tk.Label(
-            self.frm_dados,
-            text = ("Numero de telefone:")
-        )
-        self.lbl_telefone.grid(
-            row = 2,
-            column = 0,
-            padx = 5,
-            pady = 5,
-            sticky = "w"            
-        )
-        self.txt_telefone = tk.Entry(
-            self.frm_dados,
-            width = 40
-        )
-        self.txt_telefone.grid(
-            row = 2,
-            column = 1,
-            padx = 5,
-            pady = 5,
-            sticky = "w"
-        )
-        self.lbl_cpf = tk.Label(
-            self.frm_dados,
-            text = ("Numero do cpf:")
-        )
-        self.lbl_cpf.grid(
-            row = 3,
-            column = 0,
-            padx = 5,
-            pady = 5,
-            sticky = "w"
-        )
-        self.txt_cpf = tk.Entry(
-            self.frm_dados,
-            width = 40
-        )
-        self.txt_cpf.grid(
-            row = 3,
-            column = 1,
-            padx = 5,
-            pady = 5,
-            sticky = "w"
-        )
-        self.lbl_animal = tk.Label(
-            self.frm_dados,
-            text = ("Animal:")
-        )
-        self.lbl_animal.grid(
-            row = 4,
-            column = 0,
-            padx = 5,
-            pady = 5,
-            sticky = "w"
-        )
-        self.cmb_animal = ttk.Combobox(
-            self.frm_dados,
-            width = 37,
-            state = "readonly"
-        )
-        self.cmb_animal.grid(
-            row = 4,
-            column = 1,
-            padx = 5,
-            pady = 5,
-            sticky = "w"
-        )
         self.frm_botoes = tk.Frame(
             self.frm_dados,
             border = 2,
             relief = "groove"
         )
         self.frm_botoes.grid(
-            row = 5,
+            row = 4,
             column = 0,
             padx = 10,
             pady = 5,
-            columnspan = 2,
+            columnspan = 4,
         )
         self.btn_novo = tk.Button(
             self.frm_botoes,
@@ -225,72 +158,47 @@ class Cliente_View:
             padx = 5,
             pady = 5
         )
-        self.tbl_cliente = ttk.Treeview(
+        self.tbl_raca = ttk.Treeview(
             self.root,
-            height = 12
+            height = 10
         )
-        self.tbl_cliente.grid(
-            row = 2,
+        self.tbl_raca.grid(
+            row = 5,
             column = 0,
-            columnspan = 2,
+            columnspan = 4,
             padx = 10,
             pady = 10,
             sticky = "nsew"
         )
+
     def configurar_treeview(self):
-        self.tbl_cliente["columns"] = (
+        self.tbl_raca["columns"] = (
             "id",
-            "nome",
-            "telefone",
-            "cpf",
-            "animal"
+            "nome"
         )
-        self.tbl_cliente.column(
+        self.tbl_raca.column(
             "#0",
             width = 0,
             stretch = False
         )
-        self.tbl_cliente.column(
+        self.tbl_raca.column(
             "id",
             width = 10,
             anchor = "center"
         )
-        self.tbl_cliente.column(
+        self.tbl_raca.column(
             "nome",
-            width = 50
-        )
-        self.tbl_cliente.column(
-            "telefone",
             width = 40
         )
-        self.tbl_cliente.column(
-            "cpf",
-            width = 40
-        )
-        self.tbl_cliente.column(
-            "animal",
-            width = 40
-        )
-        self.tbl_cliente.heading(
+        self.tbl_raca.heading(
             "id",
             text = "ID"
         )
-        self.tbl_cliente.heading(
+        self.tbl_raca.heading(
             "nome",
             text = "Nome"
         )
-        self.tbl_cliente.heading(
-            "telefone",
-            text = "Telefone"
-        )
-        self.tbl_cliente.heading(
-            "cpf",
-            text = "CPF"
-        )
-        self.tbl_cliente.heading(
-            "animal",
-            text = "animal"
-        )
+
     def configurar_eventos(self):
         self.btn_novo.config(
             command = self.controller.new
@@ -307,79 +215,63 @@ class Cliente_View:
         self.btn_fechar.config(
             command = self.fechar
         )
-        self.tbl_cliente.bind(
+        self.tbl_raca.bind(
             "<<TreeviewSelect>>",
-            self.controller.selecionar_cliente
-
+            self.controller.selecionar_raca
         )
-    def carregar_animal(self, animal):
-        self._animal = animal
-        valores = []
-        for animal in animal:
-            valores.append(
-                f"{animal.id} - {animal.nome}"
-            )
-        self.cmb_animal["values"] = valores
-        self.cmb_animal.set("")
 
-    def preencher_campos(self, cliente):
+    def preencher_campos(self, raca):
 
         self.limpar_campos()
-        self.txt_id.config(state = "normal")
+
+        self.txt_id.config(state="normal")
+
         self.txt_id.insert(
             0,
-            str(cliente.id)
+            str(raca.id)
         )
-        self.txt_id.config(state = "readonly")
+
+        self.txt_id.config(state="readonly")
 
         self.txt_nome.insert(
             0,
-            cliente.nome
+            raca.nome
         )
 
-        for indice, animal in enumerate(self._animal):
-            if animal.id == cliente.animal.id:
-                self.cmb_animal.current(indice)
-                break
-
     def limpar_campos(self):
-        self.txt_id.config(state = "normal")
+
+        self.txt_id.config(state="normal")
         self.txt_id.delete(0, tk.END)
-        self.txt_id.config(state = "readonly")
+        self.txt_id.config(state="readonly")
 
         self.txt_nome.delete(0, tk.END)
-        self.txt_telefone.delete(0, tk.END)
-        self.txt_cpf.delete(0, tk.END)
-        self.cmb_animal.set("")
 
         self.txt_nome.focus()
 
     def limpar_treeview(self):
-        for item in self.tbl_cliente.get_children():
-            self.tbl_cliente.delete(item)
+        for item in self.tbl_raca.get_children():
+            self.tbl_raca.delete(item)
 
     def get_id_selecionado(self):
 
-        item = self.tbl_cliente.selection()[0]
+        item = self.tbl_raca.selection()[0]
 
-        return self.tbl_cliente.item(item)["values"][0]
-    
+        return self.tbl_raca.item(item)["values"][0]
+
     def confirmar_exclusao(self):
 
         return messagebox.askyesno(
-            (("confirmacao")),
-            (("Deseja realmente excluir este cliente?")),
+            (("Confirmacao")),
+            (("Deseja realmente excluir esta raca?")),
             parent=self.root
         )
-    
-    def ler_dados_cliente(self):
+
+    def ler_dados_raca(self):
+
         nome = self.txt_nome.get()
-        indice = self.cmb_animal.current()
-        if indice < 0:
-            raise ValueError((("Selecione um animal")))
-        animal= self._animal[indice]
-        return nome, animal
-    
+
+        return nome
+
     def exibir_mensagem(self, mensagem, sucesso=True):
         if sucesso:
             messagebox.showinfo(
@@ -394,26 +286,23 @@ class Cliente_View:
                 parent=self.root
             )
 
-    def exibir_cliente(self, cliente):
+    def exibir_racas(self, racas):
 
         self.limpar_treeview()
 
-        for cliente in cliente:
+        for raca in racas:
 
-            self.tbl_cliente.insert(
+            self.tbl_raca.insert(
                 "",
                 tk.END,
                 values=(
-                    cliente.id,
-                    cliente.nome,
-                    cliente.cpf,
-                    cliente.telefone,
-                    f"{cliente.animal.nome}"
+                    raca.id,
+                    raca.nome
                 )
             )
+
     def fechar(self):
         self.root.destroy()
 
     def iniciar(self):
-        self.controller.carregar_animal()
         self.controller.get_all()

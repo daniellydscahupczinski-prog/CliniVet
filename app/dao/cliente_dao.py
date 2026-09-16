@@ -1,11 +1,9 @@
 from app.dao.dao import DAO
 from app.models.cliente import Cliente
-from app.dao.animal_dao import Animal_DAO
 
 class Cliente_DAO(DAO):
-    def __init__(self, database, animal_dao):
+    def __init__(self, database):
         super().__init__(database)
-        self._animal_dao = animal_dao
 
     def save(self, cliente):
 
@@ -18,12 +16,10 @@ class Cliente_DAO(DAO):
                     (
                         NOME,
                         TELEFONE,
-                        CPF,
-                        ANIMAL_ID
+                        CPF
                     )
                     VALUES
                     (
-                        %s,
                         %s,
                         %s,
                         %s
@@ -34,8 +30,7 @@ class Cliente_DAO(DAO):
                 (
                     cliente.nome,
                     cliente.telefone,
-                    cliente.cpf,
-                    cliente.animal.id
+                    cliente.cpf
                 )
             )
 
@@ -54,6 +49,47 @@ class Cliente_DAO(DAO):
 
             self.desconectar(cursor, conexao)
 
+    def search(self, termo):
+        conexao, cursor = self.conectar()
+        try:
+            sql = """
+                    SELECT
+                        ID,
+                        NOME,
+                        TELEFONE,
+                        CPF
+                    FROM
+                        CLIENTE
+                    WHERE
+                        NOME LIKE %s
+                        OR CPF LIKE %s
+                    ORDER BY
+                        NOME
+                    """
+            termo_busca = f"%{termo}%"
+            cursor.execute(
+                sql,
+                (termo_busca, termo_busca)
+            )
+
+            registros = cursor.fetchall()
+            cliente = []
+            for registro in registros:
+                cliente.append(
+                    Cliente(
+                        registro[0],
+                        registro[1],
+                        registro[2],
+                        registro[3]
+                    )
+                )
+
+            return cliente
+
+        finally:
+
+            self.desconectar(cursor, conexao)
+
     def get_all(self):
         conexao, cursor = self.conectar()
         try:
@@ -62,8 +98,7 @@ class Cliente_DAO(DAO):
                         ID,
                         NOME,
                         TELEFONE,
-                        CPF,
-                        ANIMAL_ID
+                        CPF
                     FROM
                         CLIENTE
                     ORDER BY
@@ -74,64 +109,17 @@ class Cliente_DAO(DAO):
             registros = cursor.fetchall()
             cliente = []
             for registro in registros:
-                animal = self._animal_dao.get_by_id(
-                    registro[4]
-                )
                 cliente.append(
                     Cliente(
                         registro[0],
                         registro[1],
                         registro[2],
-                        registro[3],
-                        animal
+                        registro[3]
                     )
                 )
 
             return cliente
             
-        finally:
-
-            self.desconectar(cursor, conexao)
-
-    def get_by_animal(self, id_animal):
-        conexao, cursor = self.conectar()
-        try:
-            sql = """
-                    SELECT
-                        ID,
-                        NOME,
-                        TELEFONE,
-                        CPF,
-                        ANIMAL_ID
-                    FROM
-                        CLIENTE
-                    WHERE
-                        ANIMAL_ID = %s
-                    ORDER BY
-                        NOME
-                    """
-            cursor.execute(
-                sql,
-                (id_animal,)
-            )
-            registros = cursor.fetchall()
-            cliente = []
-            for registro in registros:
-                animal = self._animal_dao.get_by_id(
-                    registro[4]
-                )
-                cliente.append(
-                    Cliente(
-                        registro[0],
-                        registro[1],
-                        registro[2],
-                        registro[3],
-                        animal
-                    )
-                )
-
-            return cliente
-
         finally:
 
             self.desconectar(cursor, conexao)
@@ -144,8 +132,7 @@ class Cliente_DAO(DAO):
                         ID,
                         NOME,
                         TELEFONE,
-                        CPF,
-                        ANIMAL_ID
+                        CPF
                     FROM
                         CLIENTE
                     WHERE
@@ -157,15 +144,11 @@ class Cliente_DAO(DAO):
             if registro is None:
                 return None
             
-            animal = self._animal_dao.get_by_id(
-                registro[4]
-            )
             return Cliente(
                 registro[0],
                 registro[1],
                 registro[2],
-                registro[3],
-                animal
+                registro[3]
             )
 
         finally:
@@ -180,8 +163,7 @@ class Cliente_DAO(DAO):
                     SET
                         NOME = %s,
                         TELEFONE = %s,
-                        CPF = %s,
-                        ANIMAL_ID = %s
+                        CPF = %s
                     WHERE
                         ID = %s
                     """
@@ -192,7 +174,6 @@ class Cliente_DAO(DAO):
                     cliente.nome,
                     cliente.telefone,
                     cliente.cpf,
-                    cliente.animal.id,
                     cliente.id
                 )
             )
@@ -222,5 +203,3 @@ class Cliente_DAO(DAO):
             raise
         finally:
             self.desconectar(cursor, conexao)
-            
-        

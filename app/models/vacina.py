@@ -22,3 +22,10 @@ class Vacina:
     @property 
     def descricao(self):
         return self._descricao
+    @descricao.setter
+    def descricao(self, nova_descricao):
+        self._descricao = nova_descricao
+
+    def atualizar_dados(self, novo_nome, nova_descricao):
+        self._nome = novo_nome
+        self._descricao = nova_descricao

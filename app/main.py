@@ -3,18 +3,18 @@ import tkinter as tk
 from colorama import init
 
 from app.dao.veterinario_dao import Veterinario_DAO
-from app.view.veterinario_view import Veterinario_View
+from app.views.veterinario_view import Veterinario_View
 from app.controllers.veterinario_controller import Veterinario_Controller
 
 from app.dao.consulta_dao import Consulta_DAO
 from app.dao.consulta_veterinario_dao import Consulta_Veterinario_DAO
-from app.view.consulta_view import Consulta_View
+from app.views.consulta_views import Consulta_View
 from app.controllers.consulta_controller import Consulta_Controller
 
 
 from app.dao.especie_dao import Especie_DAO
 from app.dao.especie_raca_dao import Especie_Raca_DAO
-from app.view.especie_view import Especie_View
+from app.views.especie_views import Especie_View
 from app.controllers.especie_controller import Especie_Controller
 
 from app.dao.raca_dao import Raca_DAO
