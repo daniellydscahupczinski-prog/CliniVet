@@ -2,6 +2,7 @@ from app.models.consulta import Consulta
 import tkinter as tk
 from  tkinter import messagebox
 from tkinter import ttk
+from tkcalendar import DateEntry
 
 class Consulta_View:
     def __init__(self,root,controller):
@@ -72,6 +73,29 @@ class Consulta_View:
             pady = 5,
             sticky = "w"
         )
+        self.lbl_data_consulta = DateEntry(
+            self.frm_dados, 
+            text = ("DATA CONSULTA")
+        )
+        self.lbl_data_consulta.grid(
+            row = 1, 
+            column = 0, 
+            padx = 5, 
+            pady = 5, 
+            sticky = "w"
+        )
+        self.txt_data_consulta = DateEntry(
+            self.frm_dados, 
+            width = 40,
+            date_pattern="dd/mm/yyyy"
+        )
+        self.txt_data_consulta.grid(
+            row = 1, 
+            column = 1, 
+            padx = 5, 
+            pady =5, 
+            sticky ="w"
+        )
         self.lbl_horario_consulta = tk.Label(
             self.frm_dados, 
             text = ("HORÁRIO CONSULTA")
@@ -104,28 +128,6 @@ class Consulta_View:
             padx=5,
             pady=5,
             sticky="w"
-        )
-        self.lbl_data_consulta = tk.Label(
-            self.frm_dados, 
-            text = ("DATA CONSULTA")
-        )
-        self.lbl_data_consulta.grid(
-            row = 1, 
-            column = 0, 
-            padx = 5, 
-            pady = 5, 
-            sticky = "w"
-        )
-        self.txt_data_consulta = tk.Entry(
-            self.frm_dados, 
-            width = 40
-        )
-        self.txt_data_consulta.grid(
-            row = 1, 
-            column = 1, 
-            padx = 5, 
-            pady =5, 
-            sticky ="w"
         )
         self.lbl_observacoes = tk.Label(
             self.frm_dados, 
@@ -436,4 +438,5 @@ class Consulta_View:
          self.root.destroy()
 
     def iniciar(self):
-         self.controller.get_all()
+        self.controller.carregar_veterinarios()
+        self.controller.get_all()
