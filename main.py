@@ -64,19 +64,26 @@ from app.view.especie_view import Especie_View
 from app.controllers.especie_controller import Especie_Controller
 
 
-import tkinter as tk
+from app.dao.especie_dao import Especie_DAO
+from app.dao.especie_raca_dao import Especie_Raca_DAO
+from app.view.especie_view import Especie_View
+from app.controllers.especie_controller import Especie_Controller
 
+from app.dao.raca_dao import Raca_DAO
 
 class ErpApplication:
 
     def __init__(self):
+
         init(autoreset=True)
 
         self._database = Database()
 
         self._root = tk.Tk()
 
-        self._usuario_logado = None
+        self._janela_consulta = None
+        self._janela_veterinario = None
+        self._janela_especie = None
 
         self._janela_raca = None
         self._janela_agendamento = None
@@ -236,23 +243,14 @@ class ErpApplication:
         self._root.state("zoomed")
 
     def _criar_menu(self):
-        menu_principal = tk.Menu(self._root)
 
-        menu_cadastros_basicos = tk.Menu(menu_principal, tearoff=0)
-
+        menu_principal = tk.Menu(self._root) 
+        menu_cadastros_basicos = tk.Menu(menu_principal, tearoff=0) 
+        
         menu_cadastros_basicos.add_command(
-            label=("Menu de raca"),
-            command=self._abrir_raca
-        )
+            label = "Especie",
+            command = self._abrir_especie
 
-        menu_cadastros_basicos.add_command(
-            label=("Menu de cliente"),
-            command=self._abrir_cliente
-        )
-
-        menu_cadastros_basicos.add_command(
-            label=("Menu de agendamento"),
-            command=self._abrir_agendamento
         )
 
         menu_cadastros_basicos.add_command(
@@ -279,7 +277,6 @@ class ErpApplication:
             label=("Menus"),
             menu=menu_cadastros_basicos
         )
-
         menu_principal.add_command(
             label=("Agenda do dia"),
             command=self._abrir_agenda_dia
@@ -309,21 +306,11 @@ class ErpApplication:
 
         self._root.config(menu=menu_principal)
 
-    def _abrir_janela(
-        self,
-        atributo_janela,
-        classe_view,
-        controller
-    ):
-        janela_existente = getattr(
-            self,
-            atributo_janela
-        )
+    def _abrir_janela(self, atributo_janela, classe_view, controller):
 
-        if (
-            janela_existente is not None
-            and janela_existente.winfo_exists()
-        ):
+        janela_existente = getattr(self, atributo_janela)
+
+        if janela_existente is not None and janela_existente.winfo_exists():
             janela_existente.lift()
             janela_existente.focus_force()
             return
@@ -380,11 +367,14 @@ class ErpApplication:
             self._ctrl_vacina
         )
 
-    def _abrir_aplicacao_vacina(self):
+    def _abrir_consulta(self):
+        self._abrir_janela("_janela_consulta", Consulta_View,
+                            self._ctrl_consulta)
+    def _abrir_veterinario(self):
         self._abrir_janela(
-            "_janela_aplicacao_vacina",
-            Aplicacao_Vacina_View,
-            self._ctrl_aplicacao_vacina
+            "_janela_veterinario",
+            Veterinario_View,
+            self._ctrl_veterinario
         )
 
     def _abrir_agenda_dia(self):
@@ -428,8 +418,10 @@ class ErpApplication:
 
     def run(self):
         self._root.mainloop()
-
-
+        
 if __name__ == "__main__":
     app = ErpApplication()
     app.run()
+
+
+
