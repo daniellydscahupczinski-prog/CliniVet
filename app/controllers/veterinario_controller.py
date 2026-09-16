@@ -1,9 +1,11 @@
 from app.models.veterinario import Veterinario 
 
-def __init__(self,dao, view ):
-    self.dao = dao
-    self.view = view
-    self.veterinario_selecionado = None
+class Veterinario_Controller:
+
+    def __init__(self,dao, view ):
+        self.dao = dao
+        self.view = view
+        self.veterinario_selecionado = None
 
 def new(self):
     self.view.limpar_campos()
