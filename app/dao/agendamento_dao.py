@@ -15,13 +15,15 @@ class Agendamento_DAO(DAO):
             sql = """
                     INSERT INTO AGENDAMENTO
                     (
-                        SERVICO_AGENDAMENTO
-                        HORARIO_AGENDAMENTO
-                        DATA_AGENDAMENTO
-                        STATUS_AGENDAMENTO
+                        SERVICO,
+                        DATA_AGENDAMENTO,
+                        HORARIO_AGENDAMENTO,
+                        STATUS_AGENDAMENTO,
+                        ANIMAL_ID
                     )
                     VALUES
                     (
+                        %s,
                         %s,
                         %s,
                         %s,
@@ -32,10 +34,11 @@ class Agendamento_DAO(DAO):
             cursor.execute(
                 sql,
                 (
-                    agendamento.servico_agendamento,
-                    agendamento.horario_agendamento,
+                    agendamento.servico,
                     agendamento.data_agendamento,
-                    agendamento.status_agendamento
+                    agendamento.horario_agendamento,
+                    agendamento.status_agendamento,
+                    agendamento.animal_id
                 )
             )
 
@@ -62,10 +65,11 @@ class Agendamento_DAO(DAO):
             sql = """
                     SELECT
                         ID,
-                        SERVICO_AGENDAMENTO
-                        HORARIO_AGENDAMENTO,
+                        SERVICO,
                         DATA_AGENDAMENTO,
-                        STATUS_AGENDAMENTO
+                        HORARIO_AGENDAMENTO,
+                        STATUS_AGENDAMENTO,
+                        ANIMAL_ID
                     FROM
                         AGENDAMENTO
                     ORDER BY
@@ -80,7 +84,54 @@ class Agendamento_DAO(DAO):
 
             for registro in registros:
 
-               
+                agendamento.append(
+
+                    Agendamento(
+                        registro[0],
+                        registro[1],
+                        registro[2],
+                        registro[3],
+                        registro[4],
+                        registro[5]
+                    )
+
+                )
+
+            return agendamento 
+
+        finally:
+
+            self.desconectar(cursor, conexao)
+
+    def get_por_data(self, data):
+
+        conexao, cursor = self.conectar()
+
+        try:
+
+            sql = """
+                    SELECT
+                        ID,
+                        SERVICO,
+                        DATA_AGENDAMENTO,
+                        HORARIO_AGENDAMENTO,
+                        STATUS_AGENDAMENTO,
+                        ANIMAL_ID
+                    FROM
+                        AGENDAMENTO
+                    WHERE
+                        DATA_AGENDAMENTO = %s
+                    ORDER BY
+                        HORARIO_AGENDAMENTO
+                  """
+
+            cursor.execute(sql, (data,))
+
+            registros = cursor.fetchall()
+
+            agendamento = []
+
+            for registro in registros:
 
                 agendamento.append(
 
@@ -89,12 +140,13 @@ class Agendamento_DAO(DAO):
                         registro[1],
                         registro[2],
                         registro[3],
-                        registro[4]
+                        registro[4],
+                        registro[5]
                     )
 
                 )
 
-            return agendamento 
+            return agendamento
 
         finally:
 
@@ -109,10 +161,11 @@ class Agendamento_DAO(DAO):
             sql = """
                     SELECT
                         ID,
-                        SERVICO_AGENDAMENTO,
-                        HORARIO_AGENDAMENTO,
+                        SERVICO,
                         DATA_AGENDAMENTO,
-                        STATUS_AGENDAMENTO
+                        HORARIO_AGENDAMENTO,
+                        STATUS_AGENDAMENTO,
+                        ANIMAL_ID
                     FROM
                         AGENDAMENTO
                     WHERE
@@ -126,16 +179,13 @@ class Agendamento_DAO(DAO):
             if registro is None:
                 return None
 
-            agendamento = self._agendamento_dao.get_by_id(
-                registro[4]
-            )
-
             return Agendamento(
                 registro[0],
                 registro[1],
                 registro[2],
                 registro[3],
-                agendamento
+                registro[4],
+                registro[5]
             )
 
         finally:
@@ -151,10 +201,11 @@ class Agendamento_DAO(DAO):
             sql = """
                     UPDATE AGENDAMENTO
                     SET
-                        SERVICO_AGENDAMENTO = %s,
-                        HORARIO_AGENDAMENTO = %s,
+                        SERVICO = %s,
                         DATA_AGENDAMENTO = %s,
-                        STATUS_AGENDAMENTO = %s
+                        HORARIO_AGENDAMENTO = %s,
+                        STATUS_AGENDAMENTO = %s,
+                        ANIMAL_ID = %s
                     WHERE
                         ID = %s
                   """
@@ -162,11 +213,12 @@ class Agendamento_DAO(DAO):
             cursor.execute(
                 sql,
                 (
-                    agendamento.servico_agendamento,
-                    agendamento.horario_agendamento,
+                    agendamento.servico,
                     agendamento.data_agendamento,
+                    agendamento.horario_agendamento,
                     agendamento.status_agendamento,
-                    Agendamento.id
+                    agendamento.animal_id,
+                    agendamento.id
                 )
             )
 

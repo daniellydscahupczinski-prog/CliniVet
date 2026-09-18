@@ -108,8 +108,7 @@ class Agendamento_View:
         )
         self.txt_horario_agendamento = tk.Entry(
             self.frm_dados,
-            width = 20,
-            state = "readonly"
+            width = 20
         )
         self.txt_horario_agendamento.grid(
             row = 1,
@@ -151,14 +150,35 @@ class Agendamento_View:
             pady = 5,
             sticky = "w"
         )
-        self.cmb_status_agendamento = ttk.Combobox(
+        self.txt_status_agendamento = tk.Entry(
             self.frm_dados,
-            width = 37,
-            state = "readonly"
+            width = 40
         )
-        self.cmb_status_agendamento.grid(
+        self.txt_status_agendamento.grid(
             row = 2,
             column = 3,
+            padx = 5,
+            pady = 5,
+            sticky = "w"
+        )
+        self.lbl_animal_id = tk.Label(
+            self.frm_dados,
+            text = ("Animal ID:")
+        )
+        self.lbl_animal_id.grid(
+            row = 3,
+            column = 0,
+            padx = 5,
+            pady = 5,
+            sticky = "w"
+        )
+        self.txt_animal_id = tk.Entry(
+            self.frm_dados,
+            width = 20
+        )
+        self.txt_animal_id.grid(
+            row = 3,
+            column = 1,
             padx = 5,
             pady = 5,
             sticky = "w"
@@ -248,7 +268,8 @@ class Agendamento_View:
             "servico_agendamento",
             "horario_agendamento",
             "data_agendamento",
-            "status_agendamento"
+            "status_agendamento",
+            "animal_id"
         )
         self.tbl_agendamento.column(
             "#0",
@@ -278,6 +299,11 @@ class Agendamento_View:
             "status_agendamento",
             width = 30
         )
+        self.tbl_agendamento.column(
+            "animal_id",
+            width = 15,
+            anchor = "center"
+        )
         self.tbl_agendamento.heading(
             "id",
             text = "ID"
@@ -297,6 +323,10 @@ class Agendamento_View:
         self.tbl_agendamento.heading(
             "status_agendamento",
             text = "Status do agendamento"
+        )
+        self.tbl_agendamento.heading(
+            "animal_id",
+            text = "Animal ID"
         )
     def configurar_eventos(self):
         self.btn_novo.config(
@@ -331,7 +361,7 @@ class Agendamento_View:
 
         self.txt_servico_agendamento.insert(
         0,
-        agendamento.servico_agendamento
+        agendamento.servico
         )
 
         self.txt_horario_agendamento.insert(
@@ -344,8 +374,14 @@ class Agendamento_View:
         agendamento.data_agendamento
         )
 
-        self.cmb_status_agendamento.set(
+        self.txt_status_agendamento.insert(
+        0,
         agendamento.status_agendamento
+        )
+
+        self.txt_animal_id.insert(
+        0,
+        str(agendamento.animal_id)
         )
     def limpar_campos(self):
         self.txt_id.config(state="normal")
@@ -353,10 +389,14 @@ class Agendamento_View:
         self.txt_id.config(state="readonly")
 
         self.txt_servico_agendamento.delete(0, tk.END)
+
         self.txt_horario_agendamento.delete(0, tk.END)
+
         self.txt_data_agendamento.delete(0, tk.END)
 
-        self.cmb_status_agendamento.set("")
+        self.txt_status_agendamento.delete(0, tk.END)
+
+        self.txt_animal_id.delete(0, tk.END)
 
         self.txt_servico_agendamento.focus()   
 
@@ -382,9 +422,10 @@ class Agendamento_View:
         servico_agendamento = self.txt_servico_agendamento.get()
         horario_agendamento = self.txt_horario_agendamento.get()
         data_agendamento = self.txt_data_agendamento.get()
-        status_agendamento = self.cmb_status_agendamento.get()
+        status_agendamento = self.txt_status_agendamento.get()
+        animal_id = self.txt_animal_id.get()
 
-        return servico_agendamento, horario_agendamento, data_agendamento, status_agendamento
+        return servico_agendamento, horario_agendamento, data_agendamento, status_agendamento, animal_id
     
     def exibir_mensagem(self, mensagem, sucesso=True):
         if sucesso:
@@ -411,10 +452,11 @@ class Agendamento_View:
                 tk.END,
                 values=(
                     agendamento.id,
-                    agendamento.servico_agendamento,
+                    agendamento.servico,
                     agendamento.horario_agendamento,
                     agendamento.data_agendamento,
-                    agendamento.status_agendamento
+                    agendamento.status_agendamento,
+                    agendamento.animal_id
                 )
             )
     def fechar(self):

@@ -38,7 +38,7 @@ class Consulta_DAO(DAO):
         try:
             sql = """
                         SELECT ID, DATA_CONSULTA, 
-                        HORARIO_CONSULTA, OBSERVACOES
+                        HORARIO_CONSULTA, OBSERVACOES, VETERINARIO_ID
                         FROM CONSULTA ORDER BY 
                         DATA_CONSULTA
                     """
@@ -52,7 +52,8 @@ class Consulta_DAO(DAO):
                         registro[0],
                         registro[1],
                         registro[2],
-                        registro[3]
+                        registro[3],
+                        registro[4]
                     )
                 )
             return consultas
@@ -64,7 +65,7 @@ class Consulta_DAO(DAO):
         try: 
             sql = """
                     SELECT ID, DATA_CONSULTA,
-                    HORARIO_CONSULTA, OBSERVACOES
+                    HORARIO_CONSULTA, OBSERVACOES, VETERINARIO_ID
                     FROM CONSULTA
                     WHERE ID = %s
                 """
@@ -76,7 +77,8 @@ class Consulta_DAO(DAO):
                 registro[0],
                 registro[1],
                 registro[2],
-                registro[3]
+                registro[3],
+                registro[4]
             )
            
         finally: 

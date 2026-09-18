@@ -15,13 +15,14 @@ class Agendamento_Controller:
 
     def save(self):
         try:
-            servico_agendamento, horario_agendamento, data_agendamento, status_agendamento = self.view.ler_dados_agendamento()
+            servico_agendamento, horario_agendamento, data_agendamento, status_agendamento, animal_id = self.view.ler_dados_agendamento()
             agendamento = Agendamento(
                 None,
                 servico_agendamento,
-                horario_agendamento,
                 data_agendamento,
-                status_agendamento
+                horario_agendamento,
+                status_agendamento,
+                animal_id
             )
             self.dao.save(agendamento)
             self.get_all()
@@ -47,12 +48,13 @@ class Agendamento_Controller:
             if self.agendamento_selecionado is None:
                 self.view.exibir_mensagem((("Selecione um agendamento da lista", False)))
                 return
-            servico_agendamento, horario_agendamento, data_agendamento, status_agendamento = self.view.ler_dados_agendamento()
+            servico_agendamento, horario_agendamento, data_agendamento, status_agendamento, animal_id = self.view.ler_dados_agendamento()
             self.agendamento_selecionado.atualizar_dados(
                 servico_agendamento,
-                horario_agendamento,
                 data_agendamento,
-                status_agendamento
+                horario_agendamento,
+                status_agendamento,
+                animal_id
             )
             self.dao.update(self.agendamento_selecionado)
             self.get_all()

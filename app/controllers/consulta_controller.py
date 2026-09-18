@@ -20,6 +20,10 @@ class Consulta_Controller:
         self.view.limpar_campos()
         self.consulta_selecionada = None
 
+    def carregar_veterinarios(self):
+        veterinarios = self.veterinario_dao.get_all()
+        self.view.carregar_veterinarios(veterinarios)
+
     def save(self):
         try:
             data_consulta, horario_consulta, observacoes = \
@@ -61,6 +65,13 @@ class Consulta_Controller:
 
     def get_all(self):
         consultas = self.consulta_dao.get_all()
+
+        for consulta in consultas:
+            veterinario = self.veterinario_dao.get_by_id(
+                consulta.veterinario_id
+            )
+            consulta.veterinario = veterinario.nome if veterinario else ""
+
         self.view.exibir_consulta(consultas)
 
     def selecionar_consulta(self, event):
@@ -81,7 +92,7 @@ class Consulta_Controller:
                 self.view.exibir_mensagem("Selecione uma consulta da lista: ")
                 return
             data_consulta, horario_consulta, observacoes = self.view.ler_dados_consulta()
-            self.consulta_selecionada.atualizar_dados(data_consulta, horario_consulta, observacoes)
+            self.consulta_selecionada.atualizar_dados(horario_consulta, data_consulta, observacoes)
             self.consulta_dao.update(self.consulta_selecionada)
             self.get_all()
             self.view.exibir_mensagem("Consulta Atualizada com Sucesso!")

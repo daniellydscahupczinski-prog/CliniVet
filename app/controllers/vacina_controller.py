@@ -8,7 +8,7 @@ class Vacina_Controller:
         self.vacina_selecionada = None 
 
     def new(self):
-        self.view.limpar_campo()
+        self.view.limpar_campos()
 
     def save(self):
         try:
@@ -20,15 +20,15 @@ class Vacina_Controller:
             )
             self.dao.save(vacina)
             self.get_all()
-            self.view.exibir_mensagem("Estado cadastrado com sucesso!")
+            self.view.exibir_mensagem("Vacina cadastrada com sucesso!")
         except ValueError as e:
-            self.view.exibir_mensagem("Erro: ")
+            self.view.exibir_mensagem(f"Erro: {str(e)}", False)
 
     def get_all(self):
         vacina = self.dao.get_all()
-        self.view.exibir_vacina(vacina)
+        self.view.exibir_vacinas(vacina)
 
-    def selecionar_estado(self, event):
+    def selecionar_vacina(self, event):
         try:
             id_vacina = self.view.get_id_selecionado()
             self.vacina_selecionada = self.dao.get_by_id(
@@ -43,7 +43,7 @@ class Vacina_Controller:
     def update(self):
         try:
             if self.vacina_selecionada is None:
-                self.view.exibir_mensagem("Selecione uma vacina na lista.")
+                self.view.exibir_mensagem("Selecione uma vacina na lista.", False)
                 return
             nome, descricao = self.view.ler_dados_vacina()
             self.vacina_selecionada.atualizar_dados(nome, descricao)
@@ -51,12 +51,11 @@ class Vacina_Controller:
             self.get_all()
             self.view.exibir_mensagem("Vacina atualizada com sucesso!")
         except ValueError as e:
-            self.view.exibir_mensagem("Erro: ")((str(e)), False)
-
+            self.view.exibir_mensagem(f"Erro: {str(e)}", False)
 
     def delete(self):
         if self.vacina_selecionada is None:
-            self.view.exibir_mensagem("Selecione um estado na lista.")
+            self.view.exibir_mensagem("Selecione uma vacina na lista.", False)
             return
         if not self.view.confirmar_exclusao():
             return
@@ -68,6 +67,6 @@ class Vacina_Controller:
                 self.get_all()
                 self.view.exibir_mensagem("Vacina excluída com sucesso!")
             else:
-                self.view.exibir_mensagem("Vacina não encontrada.")
+                self.view.exibir_mensagem("Vacina não encontrada.", False)
         except Exception as e:
-            self.view.exibir_mensagem("Problemas ao excluir vacina")
+            self.view.exibir_mensagem("Problemas ao excluir vacina", False)

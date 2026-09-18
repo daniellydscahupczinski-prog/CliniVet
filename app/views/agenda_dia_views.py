@@ -166,7 +166,7 @@ class Agenda_Dia_View:
                 tk.END,
                 values=(
                     agendamento.id,
-                    agendamento.servico_agendamento,
+                    agendamento.servico,
                     agendamento.horario_agendamento,
                     agendamento.status_agendamento
                 )

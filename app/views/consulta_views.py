@@ -383,9 +383,10 @@ class Consulta_View:
         self.veterinarios = veterinarios
 
         self.cmb_veterinario["values"] = [
-        veterinario.nome for veterinario in veterinarios
-    ]
-        
+            veterinario.nome
+            for veterinario in veterinarios
+        ]
+
     def get_veterinario_selecionado(self):
         indice = self.cmb_veterinario.current()
 
@@ -393,15 +394,6 @@ class Consulta_View:
             return None
 
         return self.veterinarios[indice]
-    def carregar_veterinarios(self, veterinarios):
-        self.veterinarios = veterinarios
-
-        self.cmb_veterinario["values"] = [
-            veterinario.nome
-            for veterinario in veterinarios
-        ]
-    
-        
 
     def exibir_mensagem(self, mensagem, sucesso = True):
          if sucesso: 
@@ -436,4 +428,5 @@ class Consulta_View:
          self.root.destroy()
 
     def iniciar(self):
+         self.controller.carregar_veterinarios()
          self.controller.get_all()

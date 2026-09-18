@@ -1,128 +1,105 @@
 from app.dao.dao import DAO
-from app.models.especie import Especie 
+from app.models.especie import Especie
+from app.models.raca import Raca
+
 
 class Especie_DAO(DAO):
-    def __init__(self, database, raca_dao):
+    def __init__(self, database):
         super().__init__(database)
-        self._raca_dao = raca_dao
 
-    def save(self,especie):
-        conexao,cursor = self.conectar()
-        try: 
-            sql = """     INSERT INTO ESPECIE 
-            (NOME,ID_RACA) VALUES ( %s, %s )
+    def save(self, especie):
+        conexao, cursor = self.conectar()
+        try:
+            sql = """
+                INSERT INTO ESPECIE (NOME)
+                VALUES (%s)
             """
             cursor.execute(
                 sql, (
                     especie.nome,
-                    especie.raca.id
                 )
             )
             conexao.commit()
             especie.id = cursor.lastrowid
             return especie
-        except Exception: 
+        except Exception:
             conexao.rollback()
             raise
-        finally: 
-            self.desconectar(cursor,conexao)
+        finally:
+            self.desconectar(cursor, conexao)
+
+    def _montar_especie(self, registro):
+        # registro: (especie.id, especie.nome, raca.id, raca.nome)
+        raca = None
+        if registro[2] is not None:
+            raca = Raca(registro[2], registro[3])
+
+        return Especie(
+            registro[0],
+            registro[1],
+            raca
+        )
 
     def get_all(self):
         conexao, cursor = self.conectar()
-        try: 
+        try:
             sql = """
-                    SELECT ID, NOME, RACA_ID
-                    FROM ESPECIE 
-                    ORDER BY NOME
-                """
+                SELECT
+                    e.ID, e.NOME,
+                    r.ID, r.NOME
+                FROM ESPECIE e
+                LEFT JOIN (
+                    SELECT ESPECIE_ID, MIN(RACA_ID) AS RACA_ID
+                    FROM ESPECIE_RACA
+                    GROUP BY ESPECIE_ID
+                ) er ON er.ESPECIE_ID = e.ID
+                LEFT JOIN RACA r ON r.ID = er.RACA_ID
+                ORDER BY e.NOME
+            """
             cursor.execute(sql)
             registros = cursor.fetchall()
-            especies = []
-            for registro in registros: 
-                raca = self._raca_dao.get_by_id(
-                    registro[2]
-                )
-                especies.append(
-                    Especie( 
-                        registro[0],
-                        registro[1],
-                        raca
-                    )
+            return [self._montar_especie(registro) for registro in registros]
 
-                )
-            return especies 
-
-        finally: 
-            self.desconectar(cursor,conexao)
-
-    def get_by_raca(self, raca_id):
-        conexao, cursor = self.conectar()
-        try: 
-            sql = """
-                SELECT ID, NOME, RACA_ID
-                FROM ESPECIE 
-                WHERE RACA_ID = %s
-                ORDER BY NOME
-            """
-            cursor.execute(
-                sql,(raca_id,)
-            )
-            registros = cursor.fetchall()
-            especies = []
-            for registro in registros: 
-                raca = self._raca_dao.get_by_id(
-                    registro[2]
-                )
-                especies.append(
-                    Especie(
-                        registro[0],
-                        registro[1],
-                        raca
-                    )
-                )
-            return especies
-        finally: 
-            self.desconectar(cursor,conexao)
+        finally:
+            self.desconectar(cursor, conexao)
 
     def get_by_id(self, id):
         conexao, cursor = self.conectar()
-        try: 
-            sql = """ 
-                    SELECT ID, NOME, RACA_ID
-                    FROM ESPECIE 
-                    WHERE ID = %s
-                """
-            cursor.execute(sql,(id,))
+        try:
+            sql = """
+                SELECT
+                    e.ID, e.NOME,
+                    r.ID, r.NOME
+                FROM ESPECIE e
+                LEFT JOIN (
+                    SELECT ESPECIE_ID, MIN(RACA_ID) AS RACA_ID
+                    FROM ESPECIE_RACA
+                    GROUP BY ESPECIE_ID
+                ) er ON er.ESPECIE_ID = e.ID
+                LEFT JOIN RACA r ON r.ID = er.RACA_ID
+                WHERE e.ID = %s
+            """
+            cursor.execute(sql, (id,))
             registro = cursor.fetchone()
 
-            if registro is None: 
+            if registro is None:
                 return None
-            raca = self._raca_dao.get_by_id(
-                registro[2]
-            )
-            return Especie(
-                registro[0],
-                registro[1],
-                raca
-            )
-        finally: 
-            self.desconectar(cursor,conexao)
 
-    def update(self,especie):
+            return self._montar_especie(registro)
+        finally:
+            self.desconectar(cursor, conexao)
+
+    def update(self, especie):
         conexao, cursor = self.conectar()
-        try: 
+        try:
             sql = """
-                UPDATE ESPECIE SET 
-                NOME = %s,
-                RACA_ID = %s
-                WHERE 
-                ID = %s
-
+                UPDATE ESPECIE SET
+                NOME = %s
+                WHERE ID = %s
             """
             cursor.execute(
-                sql,(
-                    especie.nome, 
-                    especie.raca.id,
+                sql, (
+                    especie.nome,
                     especie.id
                 )
             )
@@ -131,12 +108,32 @@ class Especie_DAO(DAO):
         except Exception:
             conexao.rollback()
             raise
-        finally: 
+        finally:
             self.desconectar(cursor, conexao)
 
     def delete(self, id):
         conexao, cursor = self.conectar()
         try:
+            # Descobre automaticamente todas as tabelas/colunas que têm
+            # chave estrangeira apontando para ESPECIE.ID (ex: ESPECIE_RACA,
+            # ANIMAL, etc.) e apaga os vínculos antes de excluir a espécie.
+            cursor.execute(
+                """
+                SELECT TABLE_NAME, COLUMN_NAME
+                FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+                WHERE REFERENCED_TABLE_NAME = 'ESPECIE'
+                  AND REFERENCED_COLUMN_NAME = 'ID'
+                  AND TABLE_SCHEMA = DATABASE()
+                """
+            )
+            dependencias = cursor.fetchall()
+
+            for tabela, coluna in dependencias:
+                cursor.execute(
+                    f"DELETE FROM {tabela} WHERE {coluna} = %s",
+                    (id,)
+                )
+
             sql = """
                 DELETE FROM ESPECIE
                 WHERE ID = %s

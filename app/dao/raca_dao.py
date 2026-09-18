@@ -128,7 +128,8 @@ class Raca_DAO(DAO):
             cursor.execute(
                 sql,
                 (
-                    raca.nome
+                    raca.nome,
+                    raca.id
                 )
             )
 
@@ -170,5 +171,3 @@ class Raca_DAO(DAO):
         finally:
 
             self.desconectar(cursor, conexao)
-
-

@@ -1,9 +1,10 @@
 class Consulta:
-    def __init__(self,id,horario_consulta,data_consulta,observacoes):
-        self._id = id,
-        self._horario_consulta = horario_consulta
+    def __init__(self, id, data_consulta, horario_consulta, observacoes, veterinario_id=None):
+        self._id = id
         self._data_consulta = data_consulta
+        self._horario_consulta = horario_consulta
         self._observacoes = observacoes
+        self._veterinario_id = veterinario_id
 
     @property
     def id(self):
@@ -36,6 +37,14 @@ class Consulta:
     def observacoes(self,nova_observacao):
         self._observacoes = nova_observacao
 
+    @property
+    def veterinario_id(self):
+        return self._veterinario_id
+
+    @veterinario_id.setter
+    def veterinario_id(self, novo_veterinario_id):
+        self._veterinario_id = novo_veterinario_id
+
     def atualizar_dados(self,novo_horario_consulta,nova_data_consulta,novas_observacoes):
         horarios_disponiveis = {
             "08:00",
@@ -65,6 +74,4 @@ class Consulta:
         self._data_consulta = nova_data_consulta
         self._observacoes = novas_observacoes
 
-        return True 
-
-    
+        return True

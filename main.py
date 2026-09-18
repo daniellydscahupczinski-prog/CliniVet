@@ -89,10 +89,13 @@ class ErpApplication:
         self._janela_veterinario = None
         self._janela_especie = None
 
-        # ================================
+         # ================================
         # RACA
         # ================================
         self._dao_raca = Raca_DAO(
+            self._database
+        )
+        self._dao_especie = Especie_DAO(
             self._database
         )
         self._ctrl_raca = Raca_Controller(
@@ -117,10 +120,6 @@ class ErpApplication:
         # ==================================
         # ANIMAL
         # ==================================
-        self._dao_especie = Especie_DAO(
-            self._database,
-            self._dao_raca
-        )
         self._ctrl_animal = Animal_Controller(
             dao=self._dao_animal,
             cliente_dao=self._dao_cliente,
@@ -189,10 +188,6 @@ class ErpApplication:
             dao = self._dao_veterinario,
             view = None
         )
-        self._dao_especie = Especie_DAO(
-            self._database,
-            self._dao_raca
-        )
         self._dao_especie_raca= Especie_Raca_DAO(
             self._database
         )
@@ -255,7 +250,7 @@ class ErpApplication:
         )
 
         menu_cadastros_basicos.add_command(
-            label = "Especie",
+            label = "Menu de especies",
             command = self._abrir_especie
         )
 

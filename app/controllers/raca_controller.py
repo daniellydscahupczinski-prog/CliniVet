@@ -17,11 +17,9 @@ class Raca_Controller:
     def save(self):
         try:
             nome = self.view.ler_dados_raca()
-            especie_id = self.view.get_especie_selecionada()
             raca = Raca(
                 None,
-                nome,
-                especie_id
+                nome
             )
             self.dao.save(raca)
             self.get_all()
@@ -50,23 +48,19 @@ class Raca_Controller:
     def update(self):
         try:
             if self.raca_selecionada is None:
-                self.view.exibir_mensagem((("Selecione uma raca da lista", False)))
+                self.view.exibir_mensagem("Selecione uma raca da lista", False)
                 return
             nome = self.view.ler_dados_raca()
-            especie_id = self.view.get_especie_selecionada()
-            self.raca_selecionada.atualizar_dados(
-                nome,
-                especie_id
-            )
+            self.raca_selecionada.atualizar_dados(nome)
             self.dao.update(self.raca_selecionada)
             self.get_all()
             self.view.exibir_mensagem((("raca atualizada")))
         except ValueError as e:
-            self.view.exibir_mensagem(f"Erro: s{str(e)}", False)
+            self.view.exibir_mensagem(f"Erro: {str(e)}", False)
 
     def delete(self):
         if self.raca_selecionada is None:
-            self.view.exibir_mensagem((("Selecione uma raca na lista", False)))
+            self.view.exibir_mensagem("Selecione uma raca na lista", False)
             return
         if not self.view.confirmar_exclusao():
             return
@@ -78,6 +72,6 @@ class Raca_Controller:
                 self.get_all()
                 self.view.exibir_mensagem((("raca excluida com sucesso")))
             else:
-                self.view.exibir_mensagem((("Raca nao encontrada", False)))
+                self.view.exibir_mensagem("Raca nao encontrada", False)
         except Exception as e:
-            self.view.exibir_mensagem((("Problemas ao excluir raca", False)))
+            self.view.exibir_mensagem("Problemas ao excluir raca", False)

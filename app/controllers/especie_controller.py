@@ -16,13 +16,18 @@ class Especie_Controller:
     def save(self):
         try:
             nome = self.view.ler_dados_especie()
+            raca = self.view.get_raca_selecionada()  # levanta ValueError se nada selecionado
 
-            especie = Especie(
-                None,
-                nome
-            )
+            especie = Especie(None, nome)
 
-            self.dao.save(especie)
+            novo_id = self.dao.save(especie)
+            # Só sobrescrevemos especie.id se o dao realmente retornar um
+            # número (lastrowid). Se ele retornar outra coisa (ex: a própria
+            # especie), confiamos que o dao já preencheu especie.id sozinho.
+            if isinstance(novo_id, int):
+                especie.id = novo_id
+
+            self.especie_raca_dao.save(especie.id, raca.id)
 
             self.get_all()
 
@@ -55,32 +60,6 @@ class Especie_Controller:
         except IndexError:
             pass
 
-    def adicionar_raca(self):
-        if self.especie_selecionada is None:
-            self.view.exibir_mensagem(
-                "Selecione uma espécie!",
-                False
-            )
-            return
-
-        raca = self.view.get_raca_selecionada()
-
-        if raca is None:
-            self.view.exibir_mensagem(
-                "Selecione uma raça!",
-                False
-            )
-            return
-
-        self.especie_raca_dao.save(
-            self.especie_selecionada.id,
-            raca.id
-        )
-
-        self.view.exibir_mensagem(
-            "Raça adicionada à espécie com sucesso!"
-        )
-
     def carregar_racas(self):
         racas = self.raca_dao.get_all()
         self.view.carregar_racas(racas)
@@ -95,11 +74,20 @@ class Especie_Controller:
                 return
 
             nome = self.view.ler_dados_especie()
+            raca = self.view.get_raca_selecionada()
 
-            self.especie_selecionada.atualizar_dados(nome)
+            self.especie_selecionada.atualizar_dados(
+                self.especie_selecionada.id,
+                nome
+            )
 
             self.dao.update(
                 self.especie_selecionada
+            )
+
+            self.especie_raca_dao.save(
+                self.especie_selecionada.id,
+                raca.id
             )
 
             self.get_all()
@@ -144,8 +132,8 @@ class Especie_Controller:
                     False
                 )
 
-        except Exception:
+        except Exception as e:
             self.view.exibir_mensagem(
-                "Problemas ao excluir espécie.",
+                f"Problemas ao excluir espécie: {str(e)}",
                 False
             )
